@@ -263,7 +263,7 @@ class  pyana_image ( object ) :
                 pedestalsfile = calibfinder.findCalibFile(addr,"pedestals",evt.run() )
                 # get the directory from this (for the alignment)
                 calibdir = '/'.join(os.path.split(pedestalsfile)[0].split('/')[0:-1])
-            except OSError, e:
+            except OSError as e:
                 logging.debug( "Calibration directory not found: %s", e)
                 
                 
@@ -320,7 +320,7 @@ class  pyana_image ( object ) :
 
                 try:
                     self.cspad[addr].load_pedestals( pedestalsfile )
-                except OSError, e:
+                except OSError as e:
                     print("  ", e)
                     print("  ", "No pedestals will be subtracted")
 

@@ -333,7 +333,7 @@ class pyana_epics (object) :
                                             weights=values_array,
                                             bins=shots_array,
                                             histtype='step')
-            except Exception, err:
+            except Exception as err:
                 if str(err).startswith("zero-size array"):
                     # For some reason, hist() removes all 0 values,
                     # but if all the values are zero, this results
