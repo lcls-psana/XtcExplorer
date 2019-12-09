@@ -16,6 +16,7 @@ This software was developed for the LCLS project.  If you use all or
 part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #--------------------------------
 #  Imports of standard modules --
@@ -85,7 +86,7 @@ class  pyana_image_beta ( object ) :
         threshold_string = opt.getOptStrings(threshold)
 
         if self.source is None:
-            print "WARNING, not input address has been given. Exiting..."
+            print("WARNING, not input address has been given. Exiting...")
             return
 
         #if (self.quantities is None) or (len( self.quantities ) == 0) :
@@ -166,10 +167,10 @@ class  pyana_image_beta ( object ) :
         self.dark_image = None
         try: 
             self.dark_image = np.load(self.darkfile)
-            print "Dark Image %s loaded from %s" %(str(self.dark.image.shape), self.darkfile)
-            print "Darks will be subtracted from displayed images"
+            print("Dark Image %s loaded from %s" %(str(self.dark.image.shape), self.darkfile))
+            print("Darks will be subtracted from displayed images")
         except:
-            print "No dark image loaded"
+            print("No dark image loaded")
             pass
 
         ## load dark from pedestal file:
@@ -193,29 +194,29 @@ class  pyana_image_beta ( object ) :
         device = self.source.split('|')[1].split('-')[0]
         config = env.getConfig( self.configtypes[device], self.source )
         if not config:
-            print '*** %s config object is missing ***'%self.source
+            print('*** %s config object is missing ***'%self.source)
             return
 
             
         if self.source.find("Cspad")>0 :
             quads = range(4)
-            print 
-            print "Cspad configuration"
-            print "  N quadrants   : %d" % config.numQuads()
-            print "  Quad mask     : %#x" % config.quadMask()
-            print "  payloadSize   : %d" % config.payloadSize()
-            print "  badAsicMask0  : %#x" % config.badAsicMask0()
-            print "  badAsicMask1  : %#x" % config.badAsicMask1()
-            print "  asicMask      : %#x" % config.asicMask()
-            print "  numAsicsRead  : %d" % config.numAsicsRead()
+            print() 
+            print("Cspad configuration")
+            print("  N quadrants   : %d" % config.numQuads())
+            print("  Quad mask     : %#x" % config.quadMask())
+            print("  payloadSize   : %d" % config.payloadSize())
+            print("  badAsicMask0  : %#x" % config.badAsicMask0())
+            print("  badAsicMask1  : %#x" % config.badAsicMask1())
+            print("  asicMask      : %#x" % config.asicMask())
+            print("  numAsicsRead  : %d" % config.numAsicsRead())
             try:
                 # older versions may not have all methods
-                print "  roiMask       : [%s]" % ', '.join([hex(config.roiMask(q)) for q in quads])
-                print "  numAsicsStored: %s" % str(map(config.numAsicsStored, quads))
+                print("  roiMask       : [%s]" % ', '.join([hex(config.roiMask(q)) for q in quads]))
+                print("  numAsicsStored: %s" % str(map(config.numAsicsStored, quads)))
             except:
                 pass
-            print "  sections      : %s" % str(map(config.sections, quads))
-            print
+            print("  sections      : %s" % str(map(config.sections, quads)))
+            print()
         
             sections = map(config.sections, quads)
             self.cspad = CsPad(sections)
@@ -244,7 +245,7 @@ class  pyana_image_beta ( object ) :
                                                                                                                 
 
         if evt.get('skip_event'):
-            print "Told to skip this event..."
+            print("Told to skip this event...")
             return
 
 
@@ -273,7 +274,7 @@ class  pyana_image_beta ( object ) :
             the_image = frame.data()
             
         if the_image is None:
-            print "No frame image from ", self.source, " in shot#", self.n_shots
+            print("No frame image from ", self.source, " in shot#", self.n_shots)
             return
 
         # image is a numpy array (pixels)
@@ -285,7 +286,7 @@ class  pyana_image_beta ( object ) :
         # check that it has dimensions as expected from a camera image
         dim = np.shape( the_image )
         if len( dim )!= 2 :
-            print "Unexpected dimensions of image array from %s: %s" % (self.source,dim)
+            print("Unexpected dimensions of image array from %s: %s" % (self.source,dim))
 
                                 
         ## call the relevant function to get the image (faster than if-else clauses)
@@ -333,7 +334,7 @@ class  pyana_image_beta ( object ) :
             self.compute_polarcoordinates(the_image.shape)
 
         for quantity,options in self.quantities :
-            print "pyana_image_beta.py: Plotting %s with option %s"%( quantity, options)
+            print("pyana_image_beta.py: Plotting %s with option %s"%( quantity, options))
             self.funcdict_bookplot[quantity](the_image,options)
 
         # add mydata to event's plot_data 
@@ -347,7 +348,7 @@ class  pyana_image_beta ( object ) :
     # after last event has been processed. 
     def endjob( self, evt, env ) :
 
-        print "Done processing       ", self.n_shots, " events"        
+        print("Done processing       ", self.n_shots, " events")        
 
         
         # add mydata to event's plot_data 
@@ -372,11 +373,11 @@ class  pyana_image_beta ( object ) :
             filename2 = "".join(parts[0:-1]) + "_dark." + parts[-1]
 
             if average_image is not None:
-                print "Saving average of good shots to file ", filename1
+                print("Saving average of good shots to file ", filename1)
                 np.save(filename1, average_image)
 
             if rejected_image is not None: 
-                print "Saving average of dark shots to file ", filename2
+                print("Saving average of dark shots to file ", filename2)
                 np.save(filename2, rejected_image)
 
                     
@@ -409,9 +410,9 @@ class  pyana_image_beta ( object ) :
             #minbin_coord = np.unravel_index(minbin,dims)
             
 
-            print "pyana_image_beta: shot#%d "%self.n_shots ,
+            print("pyana_image_beta: shot#%d "%self.n_shots, end=' ')
             if maxvalue < self.threshold.value :
-                print " skipped (%.2f < %.2f) " % (maxvalue, float(self.threshold.value))
+                print(" skipped (%.2f < %.2f) " % (maxvalue, float(self.threshold.value)))
                 
                 # collect the rejected shots before returning to the next event
                 self.n_dark+=1
@@ -423,7 +424,7 @@ class  pyana_image_beta ( object ) :
                 evt.put(True,'skip_event') # tell downstream modules to skip this event
                 return
             else :
-                print "accepted (%.2f > %.2f) " % (maxvalue, float(self.threshold.value))
+                print("accepted (%.2f > %.2f) " % (maxvalue, float(self.threshold.value)))
         
     def compute_polarcoordinates(self,size,nbins=100,origin=None):
         nx, ny = size
@@ -459,8 +460,8 @@ class  pyana_image_beta ( object ) :
         if options is not None:
             self.mydata.roi = map(int,options) # a list
 
-        print "In book roi: ",
-        print self.mydata.roi
+        print("In book roi: ", end=' ')
+        print(self.mydata.roi)
             
     def book_spectrum_plot(self,image,options=None):
         flat = image.ravel()
@@ -470,7 +471,7 @@ class  pyana_image_beta ( object ) :
         if options is None:
             return
 
-        print options
+        print(options)
         # or should we bin it? 
         nbins = None
         range = None

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -77,7 +78,7 @@ class DataDisplay(object):
 
     def plot_ebeam(self,ebeam):
 
-        print "Making plot of array of length %d"%ebeam.shots.size
+        print("Making plot of array of length %d"%ebeam.shots.size)
 
         # make figure                
         fig = plt.figure(100, figsize=(8,8) )
@@ -87,9 +88,9 @@ class DataDisplay(object):
         
         ax1 = fig.add_subplot(221)
         if (np.size(ebeam.shots) != np.size(ebeam.energies) ):
-            print "event    ", self.n_shots
-            print "axis     ", np.size(ebeam.shots), np.shape(ebeam.shots)
-            print "energies ", np.size(ebeam.energies), np.shape(ebeam.energies)
+            print("event    ", self.n_shots)
+            print("axis     ", np.size(ebeam.shots), np.shape(ebeam.shots))
+            print("energies ", np.size(ebeam.energies), np.shape(ebeam.energies))
 
         plt.plot(ebeam.shots,ebeam.energies)
         plt.title("Beam Energy")
@@ -117,7 +118,7 @@ class DataDisplay(object):
         return
 
     def plot_gasdet(self,gasdet):
-        print "Making plot of gasdet of length %d"%gasdet.shots.size
+        print("Making plot of gasdet of length %d"%gasdet.shots.size)
                 
         # make figure
         fig = plt.figure(101, figsize=(8,8) )
@@ -159,7 +160,7 @@ class DataDisplay(object):
         return
             
     def plot_phasecavity(self,pc):
-        print "Making plot of phasecavity, based on %d shots"%pc.shots.size
+        print("Making plot of phasecavity, based on %d shots"%pc.shots.size)
 
         # make figure
         fig = plt.figure(102, figsize=(12,8) )
@@ -373,7 +374,7 @@ class DataDisplay(object):
 
             self.image_disp.title = "Cameras shot#%d"%self.event_number
 
-            print "Number of %s images in event %d is %d" % (image_data.name, self.event_number, len(self.image_disp.frames))
+            print("Number of %s images in event %d is %d" % (image_data.name, self.event_number, len(self.image_disp.frames)))
             
         newmode = self.image_disp.plot_all_frames(fignum=100,ordered=True)
         return newmode
@@ -433,7 +434,7 @@ class Frame(object):
             val = self.axis_values[x]
             return '%1.0f'%val
         except:
-            print "axis values out of range, %1.1f not in %s"%( x, str(self.axis_values.shape))
+            print("axis values out of range, %1.1f not in %s"%( x, str(self.axis_values.shape)))
             return x
 
 
@@ -449,7 +450,7 @@ class Frame(object):
         itsme +="\n orglims = %s " % str(self.orglims)
         itsme +="\n projx = %s " % self.projx
         itsme +="\n projy = %s " % self.projy
-        print itsme
+        print(itsme)
 
 
     def set_ticks(self, limits = None ):
@@ -573,7 +574,7 @@ class Frame(object):
             h = self.threshold.area[3] - self.threshold.area[2]
             self.thr_rect = plt.Rectangle(xy,w,h, facecolor='none', edgecolor='red', picker=10)
             self.axes.add_patch(self.thr_rect)
-            print "Plotting the red rectangle in area ", self.threshold.area
+            print("Plotting the red rectangle in area ", self.threshold.area)
 
 
         if self.plotter.display_mode == 2: # only if Interactive
@@ -739,7 +740,7 @@ class Plotter(object):
                     if narrs == 1 :
                         frame.imshow(frame.data[0], fignum=fignum)
                     else :
-                        print "utilities: Plotter:plot_all_frames: unsure what to do about this"
+                        print("utilities: Plotter:plot_all_frames: unsure what to do about this")
                     
                 elif ndims == 1 :
                     # line plots
@@ -826,28 +827,28 @@ class Plotter(object):
         #print "Now connected? ", self.cid1, self.cid2
 
     def onpick(self, event):
-        print "The following clickable artist object was picked: ", event.artist
+        print("The following clickable artist object was picked: ", event.artist)
 
         # in which Frame?
         for aplot in self.frames.itervalues() :
             if aplot.axes == event.artist.axes : 
 
-                print "Current   threshold = ", aplot.threshold.value
-                print "          active area [xmin xmax ymin ymax] = ", aplot.threshold.area
-                print "To change the Region of Interest, Left-click"
+                print("Current   threshold = ", aplot.threshold.value)
+                print("          active area [xmin xmax ymin ymax] = ", aplot.threshold.area)
+                print("To change the Region of Interest, Left-click")
                 if event.mouseevent.button==1:
                     self.set_ROI = True
-                    print "************************************"
-                    print "You can now select a new ROI        "
-                    print "To cancel, right-click.             "
-                    print "************************************"
+                    print("************************************")
+                    print("You can now select a new ROI        ")
+                    print("To cancel, right-click.             ")
+                    print("************************************")
 
                 if event.mouseevent.button==3:
                     self.set_ROI = False
-                    print "*************************************"
-                    print "ROI selction has now been deactivated "
-                    print "To select ROI again, left-click on the rectangle "
-                    print "************************************"
+                    print("*************************************")
+                    print("ROI selction has now been deactivated ")
+                    print("To select ROI again, left-click on the rectangle ")
+                    print("************************************")
                     
 
                 """
@@ -892,17 +893,17 @@ class Plotter(object):
 
         if self.first : 
             self.first = False
-            print """
+            print("""
             To change the color scale, click on the color bar:
             - left-click sets the lower limit
             - right-click sets higher limit
             - middle-click resets to original
-            """
+            """)
         
         # -------------- clicks outside axes ----------------------
         # can we open a dialogue box here?
         if not event.inaxes and event.button == 3 :
-            print "can we open a menu here?"
+            print("can we open a menu here?")
             #print "Close all mpl windows"
             #plt.close('all')
             
@@ -931,8 +932,8 @@ class Plotter(object):
                     new_mode = 2
                     new_mode_str = "SlideShow"   
 
-                print "Plotter display mode has been changed from %s to %d (%s)" % \
-                      (self.display_mode,new_mode,new_mode_str)
+                print("Plotter display mode has been changed from %s to %d (%s)" % \
+                      (self.display_mode,new_mode,new_mode_str))
                 self.display_mode = new_mode 
 
                 if new_mode == 2 :
@@ -970,17 +971,17 @@ class Plotter(object):
                     # left button
                     if event.button == 1 :
                         aplot.vmin = value
-                        print "mininum of %s changed:   ( %.2f , %.2f ) " % (key, aplot.vmin, aplot.vmax )
+                        print("mininum of %s changed:   ( %.2f , %.2f ) " % (key, aplot.vmin, aplot.vmax ))
                 
                     # middle button
                     elif event.button == 2 :
                         aplot.vmin, aplot.vmax = aplot.orglims
-                        print "reset %s to original: ( %.2f , %.2f ) " % (key, aplot.vmin, aplot.vmax )
+                        print("reset %s to original: ( %.2f , %.2f ) " % (key, aplot.vmin, aplot.vmax ))
                         
                     # right button
                     elif event.button == 3 :
                         aplot.vmax = value
-                        print "maximum of %s changed:   ( %.2f , %.2f ) " % (key, aplot.vmin, aplot.vmax )
+                        print("maximum of %s changed:   ( %.2f , %.2f ) " % (key, aplot.vmin, aplot.vmax ))
 
                     aplot.axesim.set_clim(aplot.vmin,aplot.vmax)
                     try:
@@ -993,9 +994,9 @@ class Plotter(object):
                 
                 if aplot.axes == event.inaxes: 
                     if self.set_ROI:
-                        print "New area ", event.xdata, event.ydata
+                        print("New area ", event.xdata, event.ydata)
                         self.ROI_coordinates = plt.ginput(n=0) 
-                        print "New coordinates", self.ROI_coordinates
+                        print("New coordinates", self.ROI_coordinates)
 
     def plot_image(self, image, fignum=1, title="", showProj=0, extent=None):
         """ plot_image

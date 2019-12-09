@@ -21,6 +21,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 
 #------------------------------
@@ -82,7 +83,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
 
         Description
         """
-        print "XtcExplorerMain"
+        print("XtcExplorerMain")
         self.psana = psana
         QtGui.QMainWindow.__init__(self)
 
@@ -117,7 +118,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         self.pyanactrl = None
         
         self.create_main_frame()
-        print "Welcome to Xtc Explorer!"
+        print("Welcome to Xtc Explorer!")
 
     def create_main_frame(self):
 
@@ -227,7 +228,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         if self.instrument:
             index = self.comboBoxIns.findText( self.instrument )
             self.comboBoxIns.setCurrentIndex(index)
-            print "index for instrument ", self.instrument, index
+            print("index for instrument ", self.instrument, index)
 
         self.comboBoxExp.clear()
         self.comboBoxExp.addItem("Experiment")
@@ -415,7 +416,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
             fileNamePattern = "e*-r%04d-*.xtc"%(self.runnumber)
         except:
             # ignore if not an integer
-            print "Please use an integer run number", self.lineEditRun.text()
+            print("Please use an integer run number", self.lineEditRun.text())
             return
 
         files = []
@@ -426,7 +427,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
                 if os.path.isfile(fullpath):                
                     files.append( fullpath )
         except:
-            print "No such file. Please select instrument and experiment"
+            print("No such file. Please select instrument and experiment")
             return
 
         if files:
@@ -435,7 +436,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
                 self.add_file( str(file) )
                 #print "file %s added "%str(file)
         else :
-            print "No files found"
+            print("No files found")
             return
 
         if files :
@@ -453,9 +454,9 @@ class XtcExplorerMain (QtGui.QMainWindow) :
                 self.lineedit.setText( str(filename) )
                 self.update_currentfiles()
             else :
-                print "Non-existent file: ", filename
+                print("Non-existent file: ", filename)
         else:
-            print "Was already in the list: ", filename
+            print("Was already in the list: ", filename)
 
     def file_browser(self):
         """Opens a Qt File Dialog
@@ -492,7 +493,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
                 found = True
 
         if not found:
-            print "No files matching %s found"% filepath
+            print("No files matching %s found"% filepath)
             return
         
         if self.filenames :
@@ -589,14 +590,14 @@ class XtcExplorerMain (QtGui.QMainWindow) :
             self.comboBoxExp.setCurrentIndex(self.comboBoxExp.findText( self.experiment ))
             self.lineEditRun.setText("%d"%self.runnumber)
         except: 
-            print "Failed to determine instrument, experiment or run number from the path (%s)."
+            print("Failed to determine instrument, experiment or run number from the path (%s).")
 
-        print "Filenames:          ", self.filenames
-        print "Directory:          ", self.directory
-        print "Experiment number:  ", self.expnumber
-        print "Experiment name:    ", self.experiment
-        print "Instrument:         ", self.instrument
-        print "Run number:         ", self.runnumber        
+        print("Filenames:          ", self.filenames)
+        print("Directory:          ", self.directory)
+        print("Experiment number:  ", self.expnumber)
+        print("Experiment name:    ", self.experiment)
+        print("Instrument:         ", self.instrument)
+        print("Run number:         ", self.runnumber)        
             
         
 
@@ -659,7 +660,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
     def documentation(self):        
         """Open confluence page on default web browser"""
         url = 'https://confluence.slac.stanford.edu/display/PCDS/XTC+Explorer'
-        print "Documentation on Confluence: %s"%url
+        print("Documentation on Confluence: %s"%url)
         webbrowser.open(url, new=2)
         
     def about(self):
@@ -719,7 +720,7 @@ part of it, please give an appropriate acknowledgment.
         
         plt.draw()
         
-        print "Done drawing"
+        print("Done drawing")
         
         #axim = plt.imshow( dark_image[500:1000,1000:1500] )#, origin='lower' )
 

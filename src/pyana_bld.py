@@ -1,3 +1,4 @@
+from __future__ import print_function
 #
 # bld.py: plot beamline data
 #
@@ -154,9 +155,9 @@ class  pyana_bld ( object ) :
                 self.EB_charge.append( beamChrg )
             else : 
                 if self.n_shots < 2 :
-                    print "No EBeam object found in shot#%d" % self.n_shots
+                    print("No EBeam object found in shot#%d" % self.n_shots)
                 if self.hadEB :
-                    print "No EBeam object found in shot#%d" % self.n_shots
+                    print("No EBeam object found in shot#%d" % self.n_shots)
                     self.EB_energies.append( -9.0 )
                     self.EB_positions.append( [-9.0, -9.0] )
                     self.EB_angles.append( [0.0, 0.0] )
@@ -180,9 +181,9 @@ class  pyana_bld ( object ) :
 
             if fee_energy is None :
                 if self.n_shots < 2 :
-                    print "No Gas Detector data object found in shot#%d"%self.n_shots
+                    print("No Gas Detector data object found in shot#%d"%self.n_shots)
                 if self.hadGD:
-                    print "No Gas Detector data object found in shot#%d" % self.n_shots
+                    print("No Gas Detector data object found in shot#%d" % self.n_shots)
                     self.GD_energies.append( [0.0,0.0,0.0,0.0] )
             else :
                 # fee_energy is a 4-number vector
@@ -205,9 +206,9 @@ class  pyana_bld ( object ) :
                     self.PC_fchrg2.append( pc.fCharge2 )
             else :
                 if self.n_shots < 2 :
-                    print "No Phase Cavity data object found in shot#%d" % self.n_shots
+                    print("No Phase Cavity data object found in shot#%d" % self.n_shots)
                 if self.hadPC :
-                    print "No Phase Cavity data object found in shot#%d" % self.n_shots
+                    print("No Phase Cavity data object found in shot#%d" % self.n_shots)
                     self.PC_ftime1.append( -999.0 )
                     self.PC_ftime2.append( -999.0 )
                     self.PC_fchrg1.append( -999.0 )
@@ -226,9 +227,9 @@ class  pyana_bld ( object ) :
                 self.IPM_fex_position.append( [ipm.ipmFexData.xpos, ipm.ipmFexData.ypos] )
             else :
                 if self.n_shots < 2 :
-                    print "No BldDataIpimb data object found in shot#%d" % self.n_shots
+                    print("No BldDataIpimb data object found in shot#%d" % self.n_shots)
                 if self.hadIPM:
-                    print "No BldDataIpimb data object found in shot#%d" % self.n_shots
+                    print("No BldDataIpimb data object found in shot#%d" % self.n_shots)
                     self.IPM_raw_channels.append( [0.0,0.0,0.0,0.0] )
                     self.IPM_fex_channels.append( [0.0,0.0,0.0,0.0] )
                     self.IPM_fex_sum.append( 0.0 )
@@ -256,7 +257,7 @@ class  pyana_bld ( object ) :
                 
     def endjob( self, evt, env ) :
         
-        print "pyana_bld endjob has been reached, after processing %d events"%self.n_shots
+        print("pyana_bld endjob has been reached, after processing %d events"%self.n_shots)
 
         # ----------------- Plotting ---------------------
         if (env.subprocess()>0):

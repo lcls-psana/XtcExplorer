@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 np.set_printoptions(precision=3,suppress=True)
 
@@ -40,9 +41,9 @@ class CsPad( object ):
         # the image visually, but requires interpolation, 
         # and makes the display rather slow... 
 
-        print "Sections ", sections, len(sections)
+        print("Sections ", sections, len(sections))
         if len(sections)>2 :
-            print "In init: ", path
+            print("In init: ", path)
             self.cspad_alignment(path)
         else :
             self.cspad2x2_alignment(path)
@@ -57,7 +58,7 @@ class CsPad( object ):
 
 
     def cspad2x2_alignment(self, path = None, file=None):
-        print "No alignment of 2x2 currently"
+        print("No alignment of 2x2 currently")
         return
     
     def cspad_alignment(self, path = None, file=None):
@@ -65,13 +66,13 @@ class CsPad( object ):
         Read in these standard parameter files. Alternative
         path/file can be given by arguments
         """
-        print "in cspad_alignment ", path
+        print("in cspad_alignment ", path)
         if path is None: # use a local copy
             calibdir = apputils.AppDataPath('XtcExplorer/calib/CSPad')
             path = calibdir.path()
-            print "Reading CsPad tile alignment from local calibration directory:", path
+            print("Reading CsPad tile alignment from local calibration directory:", path)
         else :
-            print "Reading CsPad tile alignment from ", path
+            print("Reading CsPad tile alignment from ", path)
             
             #result = fnmatch.filter(os.listdir('/'), fileNamePattern):
 
@@ -127,7 +128,7 @@ class CsPad( object ):
     def make_coordinate_map(self):
         """Make coordinate maps from meterology file
         """
-        print "Making coordinate map of the CSPAD detector."
+        print("Making coordinate map of the CSPAD detector.")
         self.x_coordinates = np.zeros((4,8,185,388), dtype="float")
         self.y_coordinates = np.zeros((4,8,185,388), dtype="float")
         self.z_coordinates = np.zeros((4,8,185,388), dtype="float")
@@ -197,10 +198,10 @@ class CsPad( object ):
                 dShort[quad,sec] = dS[dS>100] # filter out the nonsense ones
 
         dTotal = np.concatenate( (dLong.ravel(), dShort.ravel() ))
-        print "Pixel-size:"
-        print "     long side average:    %.2f +- %.2f "%( dLong.mean(), dLong.std())
-        print "     short side average:   %.2f +- %.2f "%( dShort.mean(), dShort.std())
-        print "     all sides average:    %.2f +- %.2f "%( dTotal.mean(), dTotal.std())
+        print("Pixel-size:")
+        print("     long side average:    %.2f +- %.2f "%( dLong.mean(), dLong.std()))
+        print("     short side average:   %.2f +- %.2f "%( dShort.mean(), dShort.std()))
+        print("     all sides average:    %.2f +- %.2f "%( dTotal.mean(), dTotal.std()))
 
         # use the total to convert it all to pixel units
         self.x_coordinates = self.x_coordinates / dTotal.mean()
@@ -226,7 +227,7 @@ class CsPad( object ):
                 self.y_coordinates[quad] = origin[quad][1] + self.y_coordinates[quad]
                         
 
-        print "Done making coordinate map of the CSPAD detector."
+        print("Done making coordinate map of the CSPAD detector.")
         #np.savetxt("xcoord.txt",self.x_coordinates.reshape((4*8*185,388)),fmt='%.1f')
 
 
@@ -326,16 +327,16 @@ class CsPad( object ):
                 self.pedestals = np.load(pedestalsfile).reshape((4,8,185,388))
             else :
                 self.pedestals = np.loadtxt(pedestalsfile).reshape((4,8,185,388))
-            print "Pedestals has been loaded from %s"% pedestalsfile
-            print "Pedestals will be subtracted from displayed images"
+            print("Pedestals has been loaded from %s"% pedestalsfile)
+            print("Pedestals will be subtracted from displayed images")
         except:
-            print "No pedestals loaded. File name requested was ", pedestalsfile
+            print("No pedestals loaded. File name requested was ", pedestalsfile)
             pass
 
 
     def subtract_commonmode( self ):
         if self.pedestals is None:
-            print "No pedestals defined, cannot do common mode"
+            print("No pedestals defined, cannot do common mode")
             return
 
         array_sections = self.pixels.reshape(4*8,185,388)
@@ -380,8 +381,8 @@ class CsPad( object ):
             self.pixels = array.reshape(4,8,185,388)
 
         else: 
-            print "Cannot determine common mode based on %s. "
-            print "Please set cspad.cmmode_mode to either 'asic' or 'section'"
+            print("Cannot determine common mode based on %s. ")
+            print("Please set cspad.cmmode_mode to either 'asic' or 'section'")
            
         
                 
@@ -395,9 +396,9 @@ class CsPad( object ):
                 np.save(pixelsfile, self.pixels.reshape((5920,388)))
             else :
                 np.savetxt(pixelsfile, self.pixels.reshape((5920,388)))
-            print "Pixels have been saved to %s"% pixelsfile
+            print("Pixels have been saved to %s"% pixelsfile)
         except:
-            print "Could not save to file ", pixelsfile
+            print("Could not save to file ", pixelsfile)
             pass
 
 
@@ -484,8 +485,8 @@ class CsPad( object ):
             
             quadrant[rowp:rowp+nrows, colp:colp+ncols] = pairs[sec][0:nrows,0:ncols]
             if (rowp+nrows > self.npix_quad) or (colp+ncols > self.npix_quad) :
-                print "ERROR"
-                print rowp, ":", rowp+nrows, ", ", colp, ":",colp+ncols
+                print("ERROR")
+                print(rowp, ":", rowp+nrows, ", ", colp, ":",colp+ncols)
 
 
         return quadrant

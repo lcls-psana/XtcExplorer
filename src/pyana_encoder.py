@@ -1,3 +1,4 @@
+from __future__ import print_function
 #
 # encoder.py: plot encoder data
 #
@@ -32,9 +33,9 @@ class  pyana_encoder ( object ) :
         # initialize data
         opt = PyanaOptions()
         self.sources = opt.getOptStrings(sources)
-        print "pyana_encoder, %d sources: " % len(self.sources)
+        print("pyana_encoder, %d sources: " % len(self.sources))
         for source in self.sources :
-            print "  ", source
+            print("  ", source)
 
         self.plot_every_n = opt.getOptInteger(plot_every_n)
         self.accumulate_n = opt.getOptInteger(accumulate_n)
@@ -111,7 +112,7 @@ class  pyana_encoder ( object ) :
                 message += "  Trigger on Rising Edge? = %s \n" % config._input_rising 
                 message += "  Timestamp tics per sec = %s"     % config._ticks_per_sec           
             #logging.info(message)
-            print message
+            print(message)
 
 
             
@@ -140,19 +141,19 @@ class  pyana_encoder ( object ) :
                     else:
                         self.counts[source].append( encoder._encoder_count[self.channel[source]] )
                 else:
-                    print "Unknown type"
+                    print("Unknown type")
 
                 if env.fwkName() == "psana":
                     self.timestmps[source].append( encoder.timestamp() )
                 else:
                     self.timestmps[source].append( encoder._33mhz_timestamp )
             else :
-                print "pyana_encoder: No EncoderData from %s found" % source
+                print("pyana_encoder: No EncoderData from %s found" % source)
                 self.values[source].append( -1 )
                 self.counts[source].append( -1 )
                 self.timestmps[source].append( -1 )
                 
-            print self.counts[source]
+            print(self.counts[source])
 
         # ----------------- Plotting ---------------------
         if self.plot_every_n != 0 and (self.n_shots%self.plot_every_n)==0 :

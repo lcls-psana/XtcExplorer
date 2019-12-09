@@ -16,6 +16,7 @@ This software was developed for the LCLS project.  If you use all or
 part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #--------------------------------
 #  Imports of standard modules --
@@ -84,7 +85,7 @@ class  pyana_cspad ( object ) :
         opt = PyanaOptions()
 
         self.source = opt.getOptString(source)
-        print "Using source = ", self.source
+        print("Using source = ", self.source)
 
         self.plot_every_n = opt.getOptInteger(plot_every_n)
         self.accumulate_n = opt.getOptInteger(accumulate_n)
@@ -93,27 +94,27 @@ class  pyana_cspad ( object ) :
         self.mpl_num = opt.getOptInteger(fignum)
 
         self.darkfile = opt.getOptString(dark_img_file)
-        if self.darkfile is not None: print "Input dark image file: ", self.darkfile
+        if self.darkfile is not None: print("Input dark image file: ", self.darkfile)
 
         self.pedestalfile = opt.getOptString(pedestal_file)
-        if self.pedestalfile is not None: print "Using pedestal file: ", self.pedestalfile
+        if self.pedestalfile is not None: print("Using pedestal file: ", self.pedestalfile)
 
         if self.darkfile is not None and self.pedestalfile is not None:
-            print "... cannot use both! user-supplied dark image will be used. Pedestals will be ignored"
+            print("... cannot use both! user-supplied dark image will be used. Pedestals will be ignored")
             self.pedestalfile = None
                 
         self.out_avg_file = opt.getOptString(out_avg_file)
-        if self.out_avg_file is not None: print "Output average image file: ", self.out_avg_file
+        if self.out_avg_file is not None: print("Output average image file: ", self.out_avg_file)
 
         self.out_shot_file = opt.getOptString(out_shot_file)
-        if self.out_shot_file is not None: print "Output shot image file: ", self.out_shot_file
+        if self.out_shot_file is not None: print("Output shot image file: ", self.out_shot_file)
 
         self.plot_vmin = None
         self.plot_vmax = None
         if plot_vrange is not None and plot_vrange is not "" : 
             self.plot_vmin = float(plot_vrange.strip("()").split(":")[0])
             self.plot_vmax = float(plot_vrange.strip("()").split(":")[1])
-            print "Using plot_vrange = %.2f,%.2f"%(self.plot_vmin,self.plot_vmax)
+            print("Using plot_vrange = %.2f,%.2f"%(self.plot_vmin,self.plot_vmax))
 
         #if self.plot_every_n > 0 : self.plotter.display_mode = 1 # interactive 
 
@@ -124,7 +125,7 @@ class  pyana_cspad ( object ) :
         if len(threshold_string)>0:
             self.threshold = Threshold()
             self.threshold.value = opt.getOptFloat(threshold_string[0])
-            print "Using threshold value ", self.threshold.value
+            print("Using threshold value ", self.threshold.value)
         if len(threshold_string)>1:
             self.threshold.area = np.array([0.,0.,0.,0.])            
 
@@ -136,7 +137,7 @@ class  pyana_cspad ( object ) :
             self.threshold.area[2] = float(yrange[0])
             self.threshold.area[3] = float(yrange[1])
 
-            print "Using threshold area ", self.threshold.area
+            print("Using threshold area ", self.threshold.area)
             
 
         self.plotter = Plotter()
@@ -172,7 +173,7 @@ class  pyana_cspad ( object ) :
 
         config = env.getConfig(xtc.TypeId.Type.Id_CspadConfig, self.source)
         if not config:
-            print '*** cspad config object is missing ***'
+            print('*** cspad config object is missing ***')
             return
                 
         quads = range(4)
@@ -183,35 +184,35 @@ class  pyana_cspad ( object ) :
 
         if self.pedestalfile is not None: 
             self.cspad.load_pedestals( self.pedestalfile )
-            print "cspad images will be pedestal subtracted. Using pedestals file ", self.pedestalfile
+            print("cspad images will be pedestal subtracted. Using pedestals file ", self.pedestalfile)
         else :
             # load dark image from file
             try: 
                 self.dark_image = np.load(self.darkfile)
-                print "Dark Image %s loaded from %s" %(str(self.dark.image.shape), self.darkfile)
-                print "Darks will be subtracted from displayed images"
+                print("Dark Image %s loaded from %s" %(str(self.dark.image.shape), self.darkfile))
+                print("Darks will be subtracted from displayed images")
             except:
-                print "No dark image loaded"
+                print("No dark image loaded")
                 pass
 
 
-        print 
-        print "Cspad configuration"
-        print "  N quadrants   : %d" % config.numQuads()
-        print "  Quad mask     : %#x" % config.quadMask()
-        print "  payloadSize   : %d" % config.payloadSize()
-        print "  badAsicMask0  : %#x" % config.badAsicMask0()
-        print "  badAsicMask1  : %#x" % config.badAsicMask1()
-        print "  asicMask      : %#x" % config.asicMask()
-        print "  numAsicsRead  : %d" % config.numAsicsRead()
+        print() 
+        print("Cspad configuration")
+        print("  N quadrants   : %d" % config.numQuads())
+        print("  Quad mask     : %#x" % config.quadMask())
+        print("  payloadSize   : %d" % config.payloadSize())
+        print("  badAsicMask0  : %#x" % config.badAsicMask0())
+        print("  badAsicMask1  : %#x" % config.badAsicMask1())
+        print("  asicMask      : %#x" % config.asicMask())
+        print("  numAsicsRead  : %d" % config.numAsicsRead())
         try:
             # older versions may not have all methods
-            print "  roiMask       : [%s]" % ', '.join([hex(config.roiMask(q)) for q in quads])
-            print "  numAsicsStored: %s" % str(map(config.numAsicsStored, quads))
+            print("  roiMask       : [%s]" % ', '.join([hex(config.roiMask(q)) for q in quads]))
+            print("  numAsicsStored: %s" % str(map(config.numAsicsStored, quads)))
         except:
             pass
-        print "  sections      : %s" % str(sections)
-        print
+        print("  sections      : %s" % str(sections))
+        print()
 
 
     # process event/shot data
@@ -249,7 +250,7 @@ class  pyana_cspad ( object ) :
                 cspad_image = self.cspad.get_mini_image(quads)
             
         if not quads:
-            print '*** cspad information is missing ***'
+            print('*** cspad information is missing ***')
             return
 
         # mask out hot pixels (16383)
@@ -285,9 +286,9 @@ class  pyana_cspad ( object ) :
             #minbin_coord = np.unravel_index(minbin,dims)
             
 
-            print "pyana_cspad: shot#%d "%self.n_shots ,
+            print("pyana_cspad: shot#%d "%self.n_shots, end=' ')
             if maxvalue < self.threshold.value :
-                print " skipped (%.2f < %.2f) " % (maxvalue, float(self.threshold.value))
+                print(" skipped (%.2f < %.2f) " % (maxvalue, float(self.threshold.value)))
                 
                 # collect the rejected shots before returning to the next event
                 self.n_dark+=1
@@ -299,9 +300,9 @@ class  pyana_cspad ( object ) :
                 evt.put(True,'skip_event') # tell downstream modules to skip this event
                 return
             else :
-                print "%d accepting event #%d, vmax = %.0f > %.0f ,hitrate: %.4f" % \
+                print("%d accepting event #%d, vmax = %.0f > %.0f ,hitrate: %.4f" % \
                       (env.subprocess(), self.n_shots, maxvalue,
-                       float(self.threshold.value),float(self.n_good)/float(self.n_shots))
+                       float(self.threshold.value),float(self.n_good)/float(self.n_shots)))
         # -----
         # Passed the threshold filter. Add this to the sum
         # -----
@@ -375,7 +376,7 @@ class  pyana_cspad ( object ) :
                 parts = filename.split('.')
                 filename = "".join(parts[0:-1]) + "_shot%d."%self.n_shots + parts[-1]
 
-                print "Saving this shot to file ", filename
+                print("Saving this shot to file ", filename)
                 np.save(filename, cspad_image)
                 self.n_saved += 1
                 
@@ -384,7 +385,7 @@ class  pyana_cspad ( object ) :
     # after last event has been processed. 
     def endjob( self, evt, env ) :
 
-        print "Done processing       ", self.n_shots, " events"        
+        print("Done processing       ", self.n_shots, " events")        
         
         title = self.source
 
@@ -419,7 +420,7 @@ class  pyana_cspad ( object ) :
         # newmode = self.plotter.draw_figure(cspad_image,title, fignum=self.mpl_num, showProj=True)
 
         if len(event_display_images) == 0:
-            print "No images to display from ", self.source
+            print("No images to display from ", self.source)
             return
                 
         
@@ -438,11 +439,11 @@ class  pyana_cspad ( object ) :
             filename2 = "".join(parts[0:-1]) + "_dark." + parts[-1]
 
             if average_image is not None:
-                print "Saving average of good shots to file ", filename1
+                print("Saving average of good shots to file ", filename1)
                 np.save(filename1, average_image)
 
             if rejected_image is not None: 
-                print "Saving average of dark shots to file ", filename2
+                print("Saving average of dark shots to file ", filename2)
                 np.save(filename2, rejected_image)
 
 

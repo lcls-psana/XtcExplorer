@@ -1,3 +1,4 @@
+from __future__ import print_function
 #
 # bld.py: plot beamline data
 #
@@ -155,9 +156,9 @@ class  pyana_bld_beta ( object ) :
                 self.EB_charge.append( beamChrg )
             else : 
                 if self.n_shots < 2 :
-                    print "No EBeam object found in shot#%d" % self.n_shots
+                    print("No EBeam object found in shot#%d" % self.n_shots)
                 if self.hadEB :
-                    print "No EBeam object found in shot#%d" % self.n_shots
+                    print("No EBeam object found in shot#%d" % self.n_shots)
                     self.EB_energies.append( -9.0 )
                     self.EB_positions.append( [-9.0, -9.0] )
                     self.EB_angles.append( [0.0, 0.0] )
@@ -170,9 +171,9 @@ class  pyana_bld_beta ( object ) :
 
             if fee_energy_array is None :
                 if self.n_shots < 2 :
-                    print "No Gas Detector data object found in shot#%d"%self.n_shots
+                    print("No Gas Detector data object found in shot#%d"%self.n_shots)
                 if self.hadGD:
-                    print "No Gas Detector data object found in shot#%d" % self.n_shots
+                    print("No Gas Detector data object found in shot#%d" % self.n_shots)
                     self.GD_energies.append( [0.0,0.0,0.0,0.0] )
             else :
                 # fee_energy_array is a 4-number vector
@@ -189,9 +190,9 @@ class  pyana_bld_beta ( object ) :
                 self.PC_fchrg2.append( pc.fCharge2 ) 
             else :
                 if self.n_shots < 2 :
-                    print "No Phase Cavity data object found in shot#%d" % self.n_shots
+                    print("No Phase Cavity data object found in shot#%d" % self.n_shots)
                 if self.hadPC :
-                    print "No Phase Cavity data object found in shot#%d" % self.n_shots
+                    print("No Phase Cavity data object found in shot#%d" % self.n_shots)
                     self.PC_ftime1.append( -999.0 )
                     self.PC_ftime2.append( -999.0 )
                     self.PC_fchrg1.append( -999.0 )
@@ -210,9 +211,9 @@ class  pyana_bld_beta ( object ) :
                 self.IPM_fex_position.append( [ipm.ipmFexData.xpos, ipm.ipmFexData.ypos] )
             else :
                 if self.n_shots < 2 :
-                    print "No BldDataIpimb data object found in shot#%d" % self.n_shots
+                    print("No BldDataIpimb data object found in shot#%d" % self.n_shots)
                 if self.hadIPM:
-                    print "No BldDataIpimb data object found in shot#%d" % self.n_shots
+                    print("No BldDataIpimb data object found in shot#%d" % self.n_shots)
                     self.IPM_raw_channels.append( [0.0,0.0,0.0,0.0] )
                     self.IPM_fex_channels.append( [0.0,0.0,0.0,0.0] )
                     self.IPM_fex_sum.append( 0.0 )
@@ -240,7 +241,7 @@ class  pyana_bld_beta ( object ) :
                 
     def endjob( self, evt, env ) :
         
-        print "EndJob has been reached"
+        print("EndJob has been reached")
         self.outputfile.close()
 
         # ----------------- Plotting ---------------------
@@ -262,12 +263,12 @@ class  pyana_bld_beta ( object ) :
     def make_plots(self, fignum = 1, suptitle = ""):
 
         if self.accu_start == self.n_shots :
-            print "Can't do ", suptitle
+            print("Can't do ", suptitle)
         
         if self.do_EBeam :
             if len(self.EB_charge) > 0 :
 
-                print "Making plot of array of length %d"%len(self.EB_charge)
+                print("Making plot of array of length %d"%len(self.EB_charge))
 
                 # numpy arrays
                 xaxis = np.arange( self.accu_start, self.n_shots ) 
@@ -290,9 +291,9 @@ class  pyana_bld_beta ( object ) :
 
                 ax1 = fig.add_subplot(221)
                 if (np.size(xaxis) != np.size(energies) ):
-                    print "event    ", self.n_shots
-                    print "axis     ", np.size(xaxis), np.shape(xaxis)
-                    print "energies ", np.size(energies), np.shape(energies)
+                    print("event    ", self.n_shots)
+                    print("axis     ", np.size(xaxis), np.shape(xaxis))
+                    print("energies ", np.size(energies), np.shape(energies))
                 plt.plot(xaxis,energies)
                 plt.title("Beam Energy")
                 plt.xlabel('Datagram record',horizontalalignment='left') # the other right

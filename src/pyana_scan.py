@@ -18,6 +18,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #------------------------------
 #  Module's version from SVN --
@@ -122,7 +123,7 @@ class pyana_scan (object) :
         self.ccls_ctrl = {}   # to hold ControlPV names and values
         self.ccls_scalars = {} # to hold epics and other scalar mean and std
 
-        print "Processing run number ", evt.run()
+        print("Processing run number ", evt.run())
         logging.info( "pyana_scan.beginrun() called (%d)"%self.n_runs )
 
                 
@@ -138,7 +139,7 @@ class pyana_scan (object) :
         # initialize event data
         self.n_shots = 0
         self.evts_scalars = {}
-        print "Begin calibcycle ", self.n_ccls
+        print("Begin calibcycle ", self.n_ccls)
 
         # control.ConfigV1 element
         ctrl_config = env.getConfig(xtc.TypeId.Type.Id_ControlConfig)
@@ -176,7 +177,7 @@ class pyana_scan (object) :
 
             # at first event, make a list for each scalar, to store event data
             if epv_name not in self.evts_scalars.keys() :
-                print epv_name
+                print(epv_name)
                 self.evts_scalars[epv_name] = []
 
             # store the value
@@ -267,7 +268,7 @@ class pyana_scan (object) :
         
         @param env    environment object
         """
-        print "End calibcycle %d had %d events " % (self.n_ccls, self.n_shots)
+        print("End calibcycle %d had %d events " % (self.n_ccls, self.n_shots))
         logging.info( "pyana_scan.endcalibcycle() called" )
         
         self.ccls_nevts.append(self.n_shots)
@@ -299,7 +300,7 @@ class pyana_scan (object) :
         @param env    environment object
         """
         logging.info( "pyana_scan.endrun() called" )
-        print "End run %d had %d calibcycles " % (self.n_runs, self.n_ccls)
+        print("End run %d had %d calibcycles " % (self.n_runs, self.n_ccls))
 
 
     def endjob( self, evt, env ) :
@@ -309,7 +310,7 @@ class pyana_scan (object) :
         @param env    environment object
         """
         logging.info( "pyana_scan.endjob() called" )
-        print "End job had %d runs " % (self.n_runs)
+        print("End job had %d runs " % (self.n_runs))
 
         self.make_plots(fignum=self.mpl_num, suptitle="Scan (%d calib cycles, %d shots each)" \
                         %(self.n_ccls,self.n_shots))
@@ -334,8 +335,8 @@ class pyana_scan (object) :
         if (nrows * height) > 14 : height = 14/nrows
         width=height*1.3
 
-        print "Have %d variables to be plotted, layout = %d x %d, %.2f x %.2f" % \
-              (nplots, nrows,ncols,(nrows*height),(ncols*width))
+        print("Have %d variables to be plotted, layout = %d x %d, %.2f x %.2f" % \
+              (nplots, nrows,ncols,(nrows*height),(ncols*width)))
                 
         
         # make figure

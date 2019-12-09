@@ -1,3 +1,4 @@
+from __future__ import print_function
 #-----------------------------------------
 # PyanaOptions
 #-----------------------------------------
@@ -22,8 +23,8 @@ def ncol_nrow_from_nplots(nplots):
     # --- sanity check ---
     max =  ncol * nrow
     if nplots > max :
-        print "utitilities.py: Something wrong with ncol_nrow_from_nplots() computation"
-        print "                Not enough space for %d plots in %d x %d" % (nplots, ncol, nrow)
+        print("utitilities.py: Something wrong with ncol_nrow_from_nplots() computation")
+        print("                Not enough space for %d plots in %d x %d" % (nplots, ncol, nrow))
         sys.exit(1)
     return (ncol, nrow)
 
@@ -153,7 +154,7 @@ class PyanaOptions( object ):
         if   opt == "False" or opt == "0" or opt == "No" or opt == "" : return False
         elif opt == "True" or opt == "1" or opt == "Yes" : return True
         else :
-            print "utilities.getOptBoolean: cannot parse option ", opt
+            print("utilities.getOptBoolean: cannot parse option ", opt)
             return None
 
     def getOptBooleans(self, options_string):
@@ -221,18 +222,18 @@ class BaseData( object ):
             attr = getattr(self,item)
             if attr is not None:
                 if type(attr)==str:
-                    print item, "(str) = ", attr
+                    print(item, "(str) = ", attr)
                 elif type(attr)==np.ndarray:
-                    print item, ": ndarray of dimension(s) ", attr.shape
+                    print(item, ": ndarray of dimension(s) ", attr.shape)
                 else:
-                    print item, " = ", type(attr)
+                    print(item, " = ", type(attr))
                     
     def show2( self ):
         itsme = "\n%s from %s :" % (self.type, self.name)
         myplottables = self.get_plottables()
         for key, array in myplottables.iteritems():
             itsme += "\n\t %s: \t %s   " % (key, array.shape)
-        print itsme
+        print(itsme)
         return
                     
     def get_plottables_base(self):
@@ -364,11 +365,11 @@ class ImageData( BaseData ):
         if self.roi is not None:
             try:
                 c = self.roi
-                print "image? ", self.image
-                print "roi? ", self.image[c[0]:c[1],c[2]:c[3]]
+                print("image? ", self.image)
+                print("roi? ", self.image[c[0]:c[1],c[2]:c[3]])
                 plottables["roi"] = self.image[c[0]:c[1],c[2]:c[3]]
             except:
-                print "setting ROI failed, did you define the image? "
+                print("setting ROI failed, did you define the image? ")
         return plottables
                 
 
@@ -396,7 +397,7 @@ class Threshold( object ) :
             self.is_empty = True
             return None
         
-        print "setting up Threshold object based on description:", description
+        print("setting up Threshold object based on description:", description)
             
         words = description.split(' ')
         threshold = {}
@@ -404,21 +405,21 @@ class Threshold( object ) :
             n,d = w.split('=')
             threshold[n] = d
 
-        print "Threshold:",
+        print("Threshold:", end=' ')
         if 'lower' in threshold:
             self.lower = float(threshold['lower'])
-            print " lower = %.2f"% self.lower,
+            print(" lower = %.2f"% self.lower, end=' ')
         if 'upper' in threshold:
             self.upper = float(threshold['upper']) 
-            print " upper = %.2f"% self.upper,
+            print(" upper = %.2f"% self.upper, end=' ')
         if 'mask' in threshold:
             self.mask = float(threshold['mask']) 
-            print " mask = %.2f"% self.mask,
+            print(" mask = %.2f"% self.mask, end=' ')
         if 'type' in threshold:
             self.type = threshold['type']
-            print " type = %s"% self.type,
+            print(" type = %s"% self.type, end=' ')
         if 'roi' in threshold:
             roi = [range.split(':') for range in threshold['roi'].strip('()').split(',')]
             self.region = [ int(roi[0][0]), int(roi[0][1]), int(roi[1][0]), int(roi[1][1]) ]
-            print " region = %s"% self.region,
-        print
+            print(" region = %s"% self.region, end=' ')
+        print()

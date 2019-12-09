@@ -1,3 +1,4 @@
+from __future__ import print_function
 class ModuleConfig( object ):
     """Place to store configuration of a given pyana module.
     """
@@ -23,10 +24,10 @@ class ModuleConfig( object ):
         self.options["quantities"] = " ".join(self.quantities)
 
     def dump(self, indent = ""):
-        print "%sName:    %s"%(indent, self.name)
-        print "%sAddress: %s"%(indent, self.address)
+        print("%sName:    %s"%(indent, self.name))
+        print("%sAddress: %s"%(indent, self.address))
         for okey,oval in self.options.iteritems():
-            print "%s  %s = %s"%(indent, okey,oval)
+            print("%s  %s = %s"%(indent, okey,oval))
 
     def config_snippet(self):
         self.update_options()
@@ -383,7 +384,7 @@ class Configuration( object ):
         
     def add_to_scan(self,checkbox_label):
         if not self.scan:
-            print "ERROR: add_to_scan called, but scan is set to False", self.scan
+            print("ERROR: add_to_scan called, but scan is set to False", self.scan)
         
         self.update_text()
 
@@ -424,7 +425,7 @@ class Configuration( object ):
             module = self.modules[mlabel]
             
         for m in self.modules:
-            print "   module: ", m, self.modules[m].label
+            print("   module: ", m, self.modules[m].label)
         self.update_text()
 
         return module

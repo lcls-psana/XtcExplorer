@@ -18,6 +18,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #------------------------------
 #  Module's version from SVN --
@@ -156,8 +157,8 @@ class pyana_waveform (object) :
             if self.wf_window is None:
                 self.wf_window = [ 0, nsmp ]
 
-            print "\n%s has %d channels... "%(source, nch)
-            print "Window of %.5f ns, (%d samples, %d ns each)"%(span,nsmp,unit)
+            print("\n%s has %d channels... "%(source, nch))
+            print("Window of %.5f ns, (%d samples, %d ns each)"%(span,nsmp,unit))
             
             for i in range (0, nch ):
                 if self.channels is not None and i not in self.channels : continue
@@ -256,9 +257,9 @@ class pyana_waveform (object) :
                     except: 
                         if self.accumulate_n==0:
                             if self.n_shots < 10:
-                                print "WARNING: Accumulating stack of waveforms ",
-                                print "with accumulate_n set to 0. Faster if you ",
-                                print "set accumulate_n to a number"
+                                print("WARNING: Accumulating stack of waveforms ", end=' ')
+                                print("with accumulate_n set to 0. Faster if you ", end=' ')
+                                print("set accumulate_n to a number")
                             self.wf_stack[label].append( awf )
 
 

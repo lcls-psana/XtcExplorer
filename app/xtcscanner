@@ -14,6 +14,7 @@
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #------------------------------
 #  Module's version from CVS --

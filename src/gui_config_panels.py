@@ -1,3 +1,4 @@
+from __future__ import print_function
 import multiprocessing as mp
 from PyQt4 import QtCore, QtGui
 
@@ -56,7 +57,7 @@ class RegionInput(QtGui.QWidget):
         y2 = str(self.ymax.text())
         pixels = "[%s,%s,%s,%s]"%(x1,x2,y1,y2)
         self.module.add_modifier(quantity=self.name,modifier=pixels)
-        print "ROI registered change: ", self.module, self.module.options['quantities']
+        print("ROI registered change: ", self.module, self.module.options['quantities'])
 
     def connectme(self):
         #print "Connected"
@@ -579,7 +580,7 @@ class WaveformConfigSubGui( QtGui.QWidget ):
         self.groupbox.setCheckable(True)
 
         def do_something():
-            print "do something? ", self.sender().text()
+            print("do something? ", self.sender().text())
             #print "what would parent do?"
             #print parent
 

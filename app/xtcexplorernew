@@ -19,6 +19,7 @@ part of it, please give an appropriate acknowledgement.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #------------------------------
 #  Module's version from CVS --
@@ -58,7 +59,7 @@ try it out and give me feedback and ideas, don't expect it to work yet! If you w
 any work done, I encourage you to use the old xtcexplorer instead. 
 ******************************************************************************************
 """
-    print warning
+    print(warning)
     return
 
 def main( argv ) :

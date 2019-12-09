@@ -15,6 +15,7 @@
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 
 #------------------------------
@@ -66,17 +67,17 @@ class myPopen(subprocess.Popen):
 
     def kill(self, signal = signal.SIGTERM):
         os.kill(self.pid, signal)
-        print  "pyana process %d has been killed "% self.pid
+        print("pyana process %d has been killed "% self.pid)
         status = 0 # not running
 
     def suspend(self):
         os.kill(self.pid, signal.SIGSTOP)
-        print "pyana process %d has been suspended "% self.pid
+        print("pyana process %d has been suspended "% self.pid)
         status = 2 # suspended
 
     def resume(self):
         os.kill(self.pid, signal.SIGCONT)
-        print "pyana process %d has been resumed "%self.pid
+        print("pyana process %d has been resumed "%self.pid)
         status = 1
         
 #class MyThread( threading.Thread ):
@@ -114,10 +115,10 @@ class MyThread( QtCore.QThread ):
         #self.terminate()  ... hangs indefinitely & freezes up the GUI
         #self.exit(0) ..... does nothing
         #self.quit() .... does nothing
-        print " !   python threads cannot be interupted..."
-        print " !   you'll have to wait..."
-        print " !   or ^Z and kill the whole xtcbrowser process."
-        print "done killing"
+        print(" !   python threads cannot be interupted...")
+        print(" !   you'll have to wait...")
+        print(" !   or ^Z and kill the whole xtcbrowser process.")
+        print("done killing")
     
 
 class XtcPyanaControl ( QtGui.QWidget ) :
@@ -159,7 +160,7 @@ class XtcPyanaControl ( QtGui.QWidget ) :
         self.setWindowTitle(self.Pxana + ' Control Center')
         self.setWindowIcon(QtGui.QIcon(self.lclsLogo.path()))
 
-        print "Xtc" + self.Pxana + "Control printing data ", data
+        print("Xtc" + self.Pxana + "Control printing data ", data)
             
         # container for information about the data
         self.filenames = data.files
@@ -621,13 +622,13 @@ Start with selecting data of interest to you from list on the left and general r
 
         # if scan, plot every calib cycle 
         if self.ncalib > 1 :
-            print "Have %d scan steps a %d shots each. Set up to plot after every %d shots" %\
-                  (self.ncalib, self.nevents[0], self.nevents[0] )
+            print("Have %d scan steps a %d shots each. Set up to plot after every %d shots" %\
+                  (self.ncalib, self.nevents[0], self.nevents[0] ))
             self.plotn_enter.setText( str(self.nevents[0]) )
             self.plotn_change()
             self.plotn_enter.setText("")
             
-        print "Configure " + self.pxana + " by selecting from the detector list"
+        print("Configure " + self.pxana + " by selecting from the detector list")
 
     def setup_gui_checkboxes(self) :
         """Draw a group of checkboxes to the GUI
@@ -873,7 +874,7 @@ Do you want to proceed?
         try:
             index = modules_to_run.index("XtcExplorer.pyana_scan")
         except ValueError :
-            print "ValueError"
+            print("ValueError")
             
         #print "XtcExplorer.pyana_scan at ", index
         source = str(box.text())
@@ -1026,7 +1027,7 @@ Do you want to proceed?
                 calibpath = glob.glob(calibpath)[0]
                 options_for_mod[index].append("\ncalib_path = %s"%calibpath)
             except:
-                print calibpath
+                print(calibpath)
             return
 
 #        # --- --- --- CsPad --- --- ---
@@ -1095,7 +1096,7 @@ Do you want to proceed?
             options_for_mod[index].append("\nfignum = %d" % (100*(index+1)))
             return
         
-        print "FIXME! %s requested, not implemented" % box.text() 
+        print("FIXME! %s requested, not implemented" % box.text()) 
 
     def add_linebreaks(self, configtext, width=50):
         if self.psana: # don't add linebreaks as they confuse the psana config parser
@@ -1129,11 +1130,11 @@ Do you want to proceed?
         
 
     def print_configuration(self):
-        print "----------------------------------------"
-        print "Configuration file (%s): " % self.configfile
-        print "----------------------------------------"
-        print self.configuration
-        print "----------------------------------------"
+        print("----------------------------------------")
+        print("Configuration file (%s): " % self.configfile)
+        print("----------------------------------------")
+        print(self.configuration)
+        print("----------------------------------------")
         return
 
     def write_configfile(self):
@@ -1165,7 +1166,7 @@ Do you want to proceed?
         else: 
             cfile = self.conf_widget.text()
             
-        print "# ", cfile
+        print("# ", cfile)
         f = open(cfile,'r')
         tmp_configuration = f.read()
         f.close()
@@ -1213,12 +1214,12 @@ Do you want to proceed?
         proc_emacs = None
         try: 
             myeditor = os.environ['EDITOR']
-            print "Launching your favorite editor %s to edit config file" % myeditor
+            print("Launching your favorite editor %s to edit config file" % myeditor)
             proc_emacs = myPopen("$EDITOR %s" % self.configfile, shell=True) 
         except :
-            print "Launching emacs to edit the config file."
-            print "To launch another editor of your choice, make sure to",
-            print "set the EDITOR variable in your shell environment."
+            print("Launching emacs to edit the config file.")
+            print("To launch another editor of your choice, make sure to", end=' ')
+            print("set the EDITOR variable in your shell environment.")
             proc_emacs = myPopen("emacs %s" % self.configfile, shell=True)
 
         # communicate with the process, makes everything wait for editor to finish
@@ -1309,8 +1310,8 @@ Do you want to proceed?
         else :
             return
 
-        print "Calling %s.... " % self.pxana
-        print "     ", ' '.join(lpoptions)
+        print("Calling %s.... " % self.pxana)
+        print("     ", ' '.join(lpoptions))
 
         if 1 :
             # calling a new process
@@ -1340,7 +1341,7 @@ Do you want to proceed?
             # calling as module... using threading
             self.proc_pyana = MyThread(lpoptions)
             self.proc_pyana.start()
-            print "I'm back"
+            print("I'm back")
 
         self.psana_button.setDisabled(True)
         self.pyana_button.setDisabled(True)
@@ -1375,7 +1376,7 @@ Do you want to proceed?
             else :
                 statustext = "%s process %d has finished (returncode %d)" % (self.pxana, pid, status)
         else :
-            print "No %s process to stop" % (self.pxana)
+            print("No %s process to stop" % (self.pxana))
 
         self.proc_status.setText(statustext)
         self.quit_button.setDisabled(True)
@@ -1416,7 +1417,7 @@ Do you want to proceed?
             else :
                 statustext = "%s process %d has finished (returncode %d)" % (self.pxana, pid, status)
         else :
-            print "No %s process to suspend or resume" % (self.pxana)
+            print("No %s process to suspend or resume" % (self.pxana))
 
         self.proc_status.setText(statustext)
         self.susp_button.setText(buttontext)

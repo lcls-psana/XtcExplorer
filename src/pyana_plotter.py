@@ -14,6 +14,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #------------------------------
 #  Module's version from SVN --
@@ -191,7 +192,7 @@ class pyana_plotter (object) :
         endtime = time.time()
         duration = endtime - self.starttime
         #print "Start: %.3f, Stop: %.3f, Duration: %.4f" %(self.starttime,endtime,duration)
-        print "\nTiming as measured by pyana_plotter endjob: %.4f s\n" %(duration)
+        print("\nTiming as measured by pyana_plotter endjob: %.4f s\n" %(duration))
 
         show_event = evt.get('show_event')
         if show_event and env.subprocess()<1 :
@@ -199,17 +200,17 @@ class pyana_plotter (object) :
             self.make_plots(evt)
 
             if self.display_mode > 0 :
-                print "Pyana will exit once you close all the MatPlotLib windows"            
+                print("Pyana will exit once you close all the MatPlotLib windows")            
                 plt.ioff()
                 plt.show()
                 
-        print "-------------------"
-        print "'pyana' is done!   "
-        print "-------------------"
+        print("-------------------")
+        print("'pyana' is done!   ")
+        print("-------------------")
 
 
     def make_plots(self,evt):
-        print "pyana_plotter: Shot#%d, Displaymode: %d" % (self.n_shots,self.display_mode)
+        print("pyana_plotter: Shot#%d, Displaymode: %d" % (self.n_shots,self.display_mode))
         self.data_display.event_number = self.n_shots
 
         #
@@ -224,7 +225,7 @@ class pyana_plotter (object) :
                 
         data_image = evt.get('data_image') 
         if data_image is not None:
-            print "Data images: ", [d.name for d in data_image]
+            print("Data images: ", [d.name for d in data_image])
             self.data_display.show_image(data_image)
 
         data_wf = evt.get('data_wf') 
@@ -250,35 +251,35 @@ class pyana_plotter (object) :
         """
         # get pointer to the data from each of the modules
         data_ipimbs = evt.get('data_ipimb')
-        if data_ipimbs :  print "data_ipimb: ", data_ipimbs
+        if data_ipimbs :  print("data_ipimb: ", data_ipimbs)
         else :           del data_ipimbs
         
         data_bld = evt.get('data_bld')
-        if data_bld :   print "data_bld: ", data_bld
+        if data_bld :   print("data_bld: ", data_bld)
         else :          del data_bld
         
         data_epics = evt.get('data_epics')
-        if data_epics :   print "data_epics: ", data_epics
+        if data_epics :   print("data_epics: ", data_epics)
         else :          del data_epics
         
         data_scan = evt.get('data_scan')
-        if data_scan :  print "data_scan: ", data_scan
+        if data_scan :  print("data_scan: ", data_scan)
         else :          del data_scan
         
         data_encoder = evt.get('data_encoder')
-        if data_encoder :  print "data_encoder: ", data_encoder
+        if data_encoder :  print("data_encoder: ", data_encoder)
         else :          del data_encoder
         
         data_waveform = evt.get('data_waveform')
-        if data_waveform :  print "data_waveform: ", data_waveform
+        if data_waveform :  print("data_waveform: ", data_waveform)
         else :          del data_waveform
         
         data_image = evt.get('data_image')
-        if data_image:  print "data_image: ", data_image
+        if data_image:  print("data_image: ", data_image)
         else:           del data_image
         
         data_cspad = evt.get('data_cspad')
-        if data_cspad:  print "data_cspad: ", data_cspad
+        if data_cspad:  print("data_cspad: ", data_cspad)
         else:           del data_cspad
         
         #argv=['','-pylab', '-pi1','In \\# >> ','-po','Out \\#: ']

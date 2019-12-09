@@ -18,6 +18,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #------------------------------
 #  Module's version from SVN --
@@ -180,7 +181,7 @@ class pyana_epics (object) :
                 message += "   Limits: " 
                 message += "   Ctrl: [%s - %s]   Display: [%s - %s]   Warning: [%s - %s]   Alarm: [%s - %s]" % limits
             
-                print message
+                print(message)
                 
                 self.epics_data[pv_name] = EpicsData(pv_name)
                 
@@ -320,7 +321,7 @@ class pyana_epics (object) :
 
             nbins = values_array.size
             if nbins == 0 :
-                print "No bins for ", pv_name, self.n_shots, self.accu_start
+                print("No bins for ", pv_name, self.n_shots, self.accu_start)
                 continue
             
             ymax = np.amax( values_array )

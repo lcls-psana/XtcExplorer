@@ -12,6 +12,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 import numpy as np
 
@@ -46,14 +47,14 @@ class  pyana_ipimb ( object ) :
         elif source is not None:
             self.sources = opt.getOptStrings(source)
             
-        print "pyana_ipimb, %d sources: " % len(self.sources)
+        print("pyana_ipimb, %d sources: " % len(self.sources))
         for source in self.sources :
-            print "  ", source
+            print("  ", source)
 
         self.quantities = opt.getOptStrings(quantities)
-        print "pyana_ipimb quantities to plot:"
+        print("pyana_ipimb quantities to plot:")
         for var in self.quantities:
-            print "  ", var
+            print("  ", var)
             
         self.plot_every_n = opt.getOptInteger(plot_every_n)
         self.accumulate_n = opt.getOptInteger(accumulate_n)
@@ -64,9 +65,9 @@ class  pyana_ipimb ( object ) :
         self.accu_start = None
 
         # lists to fill numpy arrays
-        print "Initializing lists..."
+        print("Initializing lists...")
         self.initlists()
-        print "done"
+        print("done")
 
 
 
@@ -105,23 +106,23 @@ class  pyana_ipimb ( object ) :
             # just for information:
             config = env.getConfig( TypeId.Type.Id_IpimbConfig , source )
             if config is not None:
-                print "IPIMB %s configuration info: "%source
-                print "   Trigger counter:     0x%lx" % config.triggerCounter()
-                print "   serial ID:           0x%lx" %config.serialID()
-                print "   Charge amp settings: 0x%x "% config.chargeAmpRange()
-                print "   Acquisition window:  %ld ns" % config.resetLength()
-                print "   Reset delay:         %d ns"% config.resetDelay()
-                print "   Reference voltage:   %f V" % config.chargeAmpRefVoltage()
-                print "   Diode bias voltage:  %f V" % config.diodeBias()
-                print "   Sampling delay:      %ld ns" % config.trigDelay()
-                print "   calibration range:   ", config.calibrationRange()
-                print "   calibration voltage: ", config.calibrationVoltage()
-                print "   status:  ", config.status()
-                print "   errors:  ", config.errors()
-                print "   calStrobeLength:     ", config.calStrobeLength()
+                print("IPIMB %s configuration info: "%source)
+                print("   Trigger counter:     0x%lx" % config.triggerCounter())
+                print("   serial ID:           0x%lx" %config.serialID())
+                print("   Charge amp settings: 0x%x "% config.chargeAmpRange())
+                print("   Acquisition window:  %ld ns" % config.resetLength())
+                print("   Reset delay:         %d ns"% config.resetDelay())
+                print("   Reference voltage:   %f V" % config.chargeAmpRefVoltage())
+                print("   Diode bias voltage:  %f V" % config.diodeBias())
+                print("   Sampling delay:      %ld ns" % config.trigDelay())
+                print("   calibration range:   ", config.calibrationRange())
+                print("   calibration voltage: ", config.calibrationVoltage())
+                print("   status:  ", config.status())
+                print("   errors:  ", config.errors())
+                print("   calStrobeLength:     ", config.calStrobeLength())
                 try: # These are only for ConfigV2
-                    print "   trigger ps delay:    ", config.trigPsDelay()
-                    print "   adc delay:           ", config.adcDelay()
+                    print("   trigger ps delay:    ", config.trigPsDelay())
+                    print("   adc delay:           ", config.adcDelay())
                 except:
                     pass
 
@@ -142,8 +143,8 @@ class  pyana_ipimb ( object ) :
                     caval.append( ( amprange >> nbits*i) & mask )
                     
                 self.data[source].gain_settings = [capacitor[version][i] for i in caval]
-                print "Capacitor settings for %s diodes: %s" %\
-                      (source, self.data[source].gain_settings)
+                print("Capacitor settings for %s diodes: %s" %\
+                      (source, self.data[source].gain_settings))
 
 
     def event ( self, evt, env ) :

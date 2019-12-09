@@ -5,6 +5,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 __version__ = "$Revision: 3190 $"
 
 #--------------------------------
@@ -90,31 +91,31 @@ class  pyana_image ( object ) :
 
         self.sources = opt.getOptStrings(sources)
         nsources = len(self.sources)
-        print "pyana_image, %d sources: " % nsources
+        print("pyana_image, %d sources: " % nsources)
         for sources in self.sources :
-            print "  ", sources
+            print("  ", sources)
 
         self.darkfile = opt.getOptString(inputdark)
-        if self.darkfile is not None: print "Input dark image file: ", self.darkfile
+        if self.darkfile is not None: print("Input dark image file: ", self.darkfile)
         
         self.algorithms = opt.getOptStrings(algorithms)
-        print "Algorithms to apply: ", self.algorithms
+        print("Algorithms to apply: ", self.algorithms)
 
         self.quantities = opt.getOptStrings(quantities)
-        print "Quantities to plot: ", self.quantities
+        print("Quantities to plot: ", self.quantities)
 
         self.threshold = Threshold(threshold)
             
         self.output_file = opt.getOptString(outputfile)
         self.output_format = opt.getOptString(output_format) or 'int16'
-        print "Output file name base: ", self.output_file
+        print("Output file name base: ", self.output_file)
 
         self.plot_vmin = None
         self.plot_vmax = None
         if plot_vrange is not None and plot_vrange is not "" : 
             self.plot_vmin = float(plot_vrange.strip("()").split(":")[0])
             self.plot_vmax = float(plot_vrange.strip("()").split(":")[1])
-            print "Using plot_vrange = %.2f,%.2f"%(self.plot_vmin,self.plot_vmax)
+            print("Using plot_vrange = %.2f,%.2f"%(self.plot_vmin,self.plot_vmax))
 
         # to keep track
         self.n_shots = None
@@ -185,12 +186,12 @@ class  pyana_image ( object ) :
         if "-YAG-" in addr:
             return("TM6740", addr)
 
-        print "Invalid device name", addr
+        print("Invalid device name", addr)
         if env.fwkName() == "psana":
             keys = env.configStore().keys()
             for k in keys:
                 if addr in str(k):
-                    print "    possible match:", k
+                    print("    possible match:", k)
         return (None, None)
 
     def beginrun( self, evt, env ):
@@ -246,7 +247,7 @@ class  pyana_image ( object ) :
         if self.calib_path is None:
             self.calib_path = env.calibDir()
 
-        print "Using calibration path: ", self.calib_path
+        print("Using calibration path: ", self.calib_path)
         
         calibfinder = CalibFileFinder(self.calib_path,"CsPad::CalibV1")
         # calibfinder is an object that knows where to look for 'calibration' files:
@@ -273,16 +274,16 @@ class  pyana_image ( object ) :
             try:
                 configType = self.configtypes[device]
             except:
-                print "no configType found for device '%s'" % device
+                print("no configType found for device '%s'" % device)
                 continue
             self.config = env.getConfig(configType, detsrc )
             if not self.config:
-                print "*** getConfig(configType='%s', detsrc='%s') failed (addr='%s')" % (configType, detsrc, addr)
+                print("*** getConfig(configType='%s', detsrc='%s') failed (addr='%s')" % (configType, detsrc, addr))
                 if env.fwkName() == "psana":
                     keys = env.configStore().keys()
                     for k in keys:
                         if detsrc in str(k):
-                            print "*** possible match:", k
+                            print("*** possible match:", k)
                 continue
 
 
@@ -320,8 +321,8 @@ class  pyana_image ( object ) :
                 try:
                     self.cspad[addr].load_pedestals( pedestalsfile )
                 except OSError, e:
-                    print "  ", e
-                    print "  ", "No pedestals will be subtracted"
+                    print("  ", e)
+                    print("  ", "No pedestals will be subtracted")
 
                     
     # process event/shot data
@@ -351,14 +352,14 @@ class  pyana_image ( object ) :
                 # in this case 'frame' is the MiniElement
                 # call cspad library to assemble the image
                 if not addr in self.cspad:
-                    print "No Cspad2x2 entry found for %s" % addr
+                    print("No Cspad2x2 entry found for %s" % addr)
                     continue
                 image = self.cspad[addr].get_mini_image(frame)
 
             elif addr.find("Cspad")>0 :
                 # in this case we need the specialized getter: 
                 if not addr in self.cspad:
-                    print "No Cspad entry found for %s" % addr
+                    print("No Cspad entry found for %s" % addr)
                     continue
                 if env.fwkName() == "psana":
                     nquads = frame.quads_shape()[0]
@@ -380,11 +381,11 @@ class  pyana_image ( object ) :
                 try:
                     image = frame.data()
                 except:
-                    print "\n*** Could not get frame.data() for", addr, "***\n"
+                    print("\n*** Could not get frame.data() for", addr, "***\n")
                     raise
 
             if image is None:
-                print "No frame image from ", addr, " in shot#", self.n_shots
+                print("No frame image from ", addr, " in shot#", self.n_shots)
                 continue
 
             # save original reference so we can tell whether we really need to make a copy later on.
@@ -399,7 +400,7 @@ class  pyana_image ( object ) :
             # check that it has dimensions as expected from a camera image
             dim = np.shape( image )
             if len( dim )!= 2 :
-                print "Unexpected dimensions of image array from %s: %s" % (addr,dim)
+                print("Unexpected dimensions of image array from %s: %s" % (addr,dim))
 
             # ---------------------------------------------------------------------------------------
             # Subtract dark image
@@ -463,7 +464,7 @@ class  pyana_image ( object ) :
                     #print "average value of the ROI = ", maxvalue
                     
                 # apply the threshold
-                print self.threshold.lower, self.threshold.upper, maxvalue
+                print(self.threshold.lower, self.threshold.upper, maxvalue)
                 if self.threshold.lower is not None and maxvalue < self.threshold.lower :
                     isDark = True
                     name += "_dark"
@@ -478,12 +479,12 @@ class  pyana_image ( object ) :
                 VeryVerbose = False
                 if VeryVerbose :
                     if (not isDark) and (not isSaturated): 
-                        print "%d accepting %s #%d, vmax = %.0f, hitrate: %.4f" % \
+                        print("%d accepting %s #%d, vmax = %.0f, hitrate: %.4f" % \
                               (env.subprocess(), addr, self.n_shots, maxvalue, \
-                               float(self.n_good[addr]+1)/float(self.n_shots))
+                               float(self.n_good[addr]+1)/float(self.n_shots)))
                     else :
-                        print "%d rejecting %s #%d, vmax = %.0f"%(env.subprocess(), \
-                                                                  addr,self.n_shots, maxvalue)
+                        print("%d rejecting %s #%d, vmax = %.0f"%(env.subprocess(), \
+                                                                  addr,self.n_shots, maxvalue))
 
             # ----------- Event Image -----------
             if "image" in self.quantities:
@@ -568,7 +569,7 @@ class  pyana_image ( object ) :
     def endjob( self, evt, env ) :
         logging.info( "pyana_image.endjob()" )
 
-        print "Done processing       ", self.n_shots, " events"
+        print("Done processing       ", self.n_shots, " events")
 
         # no more events to process. Just fetch the collected data and redraw
         if (env.subprocess()>0):
@@ -649,7 +650,7 @@ class  pyana_image ( object ) :
                 thename+="%s"%fname[i] 
                 thename+="_%s"%identifier
                 thename+=".%s"%fname[-1]
-                print "Saving \"%s\" (%s) %s to file %s"% (name, title, array.shape, thename)
+                print("Saving \"%s\" (%s) %s to file %s"% (name, title, array.shape, thename))
 
                 array = array.astype(self.output_format)                
                 # output files... 

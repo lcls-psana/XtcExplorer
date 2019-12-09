@@ -1,4 +1,5 @@
 #!@PYTHON@
+from __future__ import print_function
 
 from random import randint
 from os import system
@@ -42,9 +43,9 @@ class XtcSearcher ( object ) :
             self.scan(dg.xtc)
 
         if len(self.new_contents) > 0:
-            print "#------------------------------------------------------------"
+            print("#------------------------------------------------------------")
             for content in self.new_contents:
-                print "#", content
+                print("#", content)
             system("xtcexplorer --psana " + pattern)
             stdout.flush()
 
@@ -55,14 +56,14 @@ def main():
         dir_pattern = "/reg/d/ana02/%s/%s*/xtc" % (exp, exp)
         dirs = glob(dir_pattern)
         for dir in dirs:
-            print "# searching %s..." % dir
+            print("# searching %s..." % dir)
             stdout.flush()
             file_pattern = dir + "/e*-r%04d-s??-c??.xtc"
             i = randint(1, 100)
             while i < 9999:
                 main.search(file_pattern, i, 10)
                 skip = randint(1, 20)
-                print "# skipping by %d..." % skip
+                print("# skipping by %d..." % skip)
                 i += skip
 
 if __name__ == "__main__" :

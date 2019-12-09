@@ -23,6 +23,7 @@ part of it, please give an appropriate acknowledgment.
 @author  $Author: $ 
 @data    $Date: $
 """
+from __future__ import print_function
 
 
 #------------------------------
@@ -132,17 +133,17 @@ class XtcScanner ( object ) :
         self.epicsPVs = []
         self.controls = []
 
-        print "Scanning...."
+        print("Scanning....")
         
         if len(self.files)==0 :
-            print "You need to select an xtc file"
+            print("You need to select an xtc file")
             return
 
         self.fsize = 0
         for fname in self.files :
             self.fsize += os.path.getsize(fname)
             
-        print "Start parsing files: \n", self.files
+        print("Start parsing files: \n", self.files)
         start = time.clock()
 
         # read datagrams one by one
@@ -185,15 +186,15 @@ class XtcScanner ( object ) :
             # print progress bar
             frac = float(self.dgsize)/float(self.fsize)
             if (ndg%100) == 1:
-                print "\r  %d datagrams read (%.0f%%)" % (ndg, 100*frac) ,
+                print("\r  %d datagrams read (%.0f%%)" % (ndg, 100*frac), end=' ')
                 sys.stdout.flush()
             if (ndg%10) == 0:
-                print " . " ,
+                print(" . ", end=' ')
                 sys.stdout.flush()
 
         elapsed = ( time.clock() - start )
         frac = float(self.dgsize)/float(self.fsize)
-        print "\r  %d datagrams read (approx %.0f %% of run) in %f s " % (ndg, 100*frac, elapsed)
+        print("\r  %d datagrams read (approx %.0f %% of run) in %f s " % (ndg, 100*frac, elapsed))
 
         self.printSummary(opt_epics=self.options['epics'])
 
@@ -204,51 +205,51 @@ class XtcScanner ( object ) :
 
     def printSummary(self, opt_bld=1, opt_det=1, opt_epics=False):
 
-        print "-------------------------------------------------------------"
-        print "XtcScanner information: "
-        print "  - %d calibration cycles." % self.ncalib
-        print "  - Events per calib cycle: \n  ", self.nevents
-        print
+        print("-------------------------------------------------------------")
+        print("XtcScanner information: ")
+        print("  - %d calibration cycles." % self.ncalib)
+        print("  - Events per calib cycle: \n  ", self.nevents)
+        print()
 
-        print "Information from ", len(self.controls), " control channels found:"
+        print("Information from ", len(self.controls), " control channels found:")
         for ctrl in self.controls :
-            print ctrl
-        print "Information from ", len(self.devices), " devices found"
+            print(ctrl)
+        print("Information from ", len(self.devices), " devices found")
         sortedkeys = sorted( self.devices.keys() )
         for d in sortedkeys :
-            print "%35s: " % d,
+            print("%35s: " % d, end=' ')
             for info in self.moreinfo[d] :
                 if info is not None:
-                    print "(%s)\t" % info,
+                    print("(%s)\t" % info, end=' ')
                 else :
-                    print "%s\t" % "   ",
+                    print("%s\t" % "   ", end=' ')
             for i in range ( len(self.devices[d] ) ):
-                print " %s (%d) " % ( self.devices[d][i],  self.counters[d][i] ),
-            print
+                print(" %s (%d) " % ( self.devices[d][i],  self.counters[d][i] ), end=' ')
+            print()
 
         if opt_epics :
-            print "Epics PVs: ", len(self.epicsPVs)
-            print self.epicsPVs
+            print("Epics PVs: ", len(self.epicsPVs))
+            print(self.epicsPVs)
 
 
-        print "XtcScanner is done!"
-        print "-------------------------------------------------------------"
+        print("XtcScanner is done!")
+        print("-------------------------------------------------------------")
 
 
     def setFiles(self, filenames):
         self.files = filenames
 
     def showFiles(self):
-        print self.files
+        print(self.files)
 
 
     # set one or more options
     def setOption(self, anoption):
         self.options.update(anoption)
-        print "What's here?"
+        print("What's here?")
 
     def showOptions(self):
-        print self.options
+        print(self.options)
 
     def ndev(self):
         return len(self.devices)
@@ -272,7 +273,7 @@ class XtcScanner ( object ) :
 
         # some kind of damage may break even 'contains'
         if xtc.damage.hasDamage(Damage.Value.IncompleteContribution) :
-            print "damage found in scan (%d) of %s ", self._counter, xtc.src
+            print("damage found in scan (%d) of %s ", self._counter, xtc.src)
             return
 
         if xtc.contains.id() == TypeId.Type.Id_Xtc :
@@ -297,7 +298,7 @@ class XtcScanner ( object ) :
             elif ( dtype=='ProcInfo'):
                 dname = source.split(",")[0]
             else:
-                print dtype, xtc.src
+                print(dtype, xtc.src)
             dkey = dtype + ':' + dname
             
             if self._state == TransitionId.Configure:
@@ -351,7 +352,7 @@ class XtcScanner ( object ) :
                     data = xtc.payload()
                     if data.uses_duration():
                         worthknowing = "Calibcycle Duration = %s "% str(data.duration())
-                        print worthknowing
+                        print(worthknowing)
                     if data.uses_events():
                         worthknowing = "Each calibcycle a %d events"% data.events()
                         

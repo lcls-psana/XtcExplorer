@@ -1,3 +1,4 @@
+from __future__ import print_function
 #
 # ipimb.py: plot beamline data
 #
@@ -33,9 +34,9 @@ class  pyana_ipimb_beta ( object ) :
         self.source = opt.getOptString(source)
             
         self.quantities = opt.getOptStrings(quantities)
-        print "pyana_ipimb_beta quantities to plot:"
+        print("pyana_ipimb_beta quantities to plot:")
         for var in self.quantities:
-            print "  ", var
+            print("  ", var)
             
         # other
         self.n_shots = None
@@ -76,7 +77,7 @@ class  pyana_ipimb_beta ( object ) :
     def event ( self, evt, env ) :
 
         self.n_shots+=1
-        print self.n_shots
+        print(self.n_shots)
 
         if evt.get('skip_event') :
             return
@@ -117,7 +118,7 @@ class  pyana_ipimb_beta ( object ) :
                 if self.mydata.fex_position is not None:
                     self.mydata.fex_position.append( [ipmFex.xpos, ipmFex.ypos] )
             else :
-                print "No Ipimb fex data"
+                print("No Ipimb fex data")
 
             # raw data
             if ipmRaw: 
@@ -132,7 +133,7 @@ class  pyana_ipimb_beta ( object ) :
                                                       ipmRaw.channel2Volts(),
                                                       ipmRaw.channel3Volts() ] )
             else:
-                print "No Ipimb raw data"
+                print("No Ipimb raw data")
 
 
 
@@ -156,7 +157,7 @@ class  pyana_ipimb_beta ( object ) :
     def make_plots(self, title = ""):
 
         if self.n_shots == self.accu_start: 
-            print "Cannot do ", title
+            print("Cannot do ", title)
             return
 
         # -------- Begin: move this to beginJob

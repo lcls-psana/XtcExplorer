@@ -14,6 +14,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 #------------------------------
 #  Module's version from SVN --
@@ -108,7 +109,7 @@ class pyana_plotter_beta (object) :
         if display_mode == "Interactive" : self.display_mode = 1
         if display_mode == "SlideShow" :   self.display_mode = 2
         if self.display_mode is None:
-            print "Unknown display mode %s, using NoDisplay (0)"%display_mode
+            print("Unknown display mode %s, using NoDisplay (0)"%display_mode)
             self.display_mode = 0
 
         opt = PyanaOptions() # convert option string to appropriate type        
@@ -194,12 +195,12 @@ class pyana_plotter_beta (object) :
 
         if plot_data is not None: 
 
-            print "# Plot data in event %d:"%(self.n_shots)
+            print("# Plot data in event %d:"%(self.n_shots))
             for source in plot_data:
-                print "- %s:  "%(source.name)
+                print("- %s:  "%(source.name))
                 plottables = source.get_plottables()
                 for key in plottables.keys():
-                    print "\t %s: %s "%(key,plottables[key].shape)
+                    print("\t %s: %s "%(key,plottables[key].shape))
 
                 source.display()
 
@@ -235,7 +236,7 @@ class pyana_plotter_beta (object) :
         endtime = time.time()
         duration = endtime - self.starttime
         #print "Start: %.3f, Stop: %.3f, Duration: %.4f" %(self.starttime,endtime,duration)
-        print "\nTiming as measured by pyana_plotter_beta endjob: %.4f s\n" %(duration)
+        print("\nTiming as measured by pyana_plotter_beta endjob: %.4f s\n" %(duration))
                                 
         if (env.subprocess()<1):        
             
@@ -255,7 +256,7 @@ class pyana_plotter_beta (object) :
             #----------------------------------------------------------
             event_display_images = evt.get( 'event_display_images')
             if event_display_images: 
-                print "pyana_plotter_beta: Plotting %d plots"%len(event_display_images)
+                print("pyana_plotter_beta: Plotting %d plots"%len(event_display_images))
                 self.plotter.draw_figurelist(201,
                                              event_display_images,
                                              title="End job",
@@ -266,18 +267,18 @@ class pyana_plotter_beta (object) :
                 if self.ipython :
                     self.launch_ipython(evt)
             
-                print "Pyana will exit once you close all the MatPlotLib windows"            
+                print("Pyana will exit once you close all the MatPlotLib windows")            
                 if self.display_mode > 0 :
                     plt.ioff()
                     plt.show()
 
 
-        print "-------------------"
-        print "Done running pyana."
-        print "To run pyana again, edit config file if needed and hit \"Run pyana\" button again"
-        print "Send any feedback on this program to ofte@slac.stanford.edu"
-        print "Thank you!"
-        print "-------------------"
+        print("-------------------")
+        print("Done running pyana.")
+        print("To run pyana again, edit config file if needed and hit \"Run pyana\" button again")
+        print("Send any feedback on this program to ofte@slac.stanford.edu")
+        print("Thank you!")
+        print("-------------------")
 
 
     def launch_ipython(self, evt):
@@ -285,35 +286,35 @@ class pyana_plotter_beta (object) :
         """
         # get pointer to the data from each of the modules
         data_ipimb = evt.get('data_ipimb')
-        if data_ipimb :  print "data_ipimb: ", data_ipimb
+        if data_ipimb :  print("data_ipimb: ", data_ipimb)
         else :           del data_ipimb
         
         data_bld = evt.get('data_bld')
-        if data_bld :   print "data_bld: ", data_bld
+        if data_bld :   print("data_bld: ", data_bld)
         else :          del data_bld
         
         data_epics = evt.get('data_epics')
-        if data_epics :   print "data_epics: ", data_epics
+        if data_epics :   print("data_epics: ", data_epics)
         else :          del data_epics
         
         data_scan = evt.get('data_scan')
-        if data_scan :  print "data_scan: ", data_scan
+        if data_scan :  print("data_scan: ", data_scan)
         else :          del data_scan
         
         data_encoder = evt.get('data_encoder')
-        if data_encoder :  print "data_encoder: ", data_encoder
+        if data_encoder :  print("data_encoder: ", data_encoder)
         else :          del data_encoder
         
         data_waveform = evt.get('data_waveform')
-        if data_waveform :  print "data_waveform: ", data_waveform
+        if data_waveform :  print("data_waveform: ", data_waveform)
         else :          del data_waveform
         
         data_image = evt.get('data_image')
-        if data_image:  print "data_image: ", data_image
+        if data_image:  print("data_image: ", data_image)
         else:           del data_image
         
         data_cspad = evt.get('data_cspad')
-        if data_cspad:  print "data_cspad: ", data_cspad
+        if data_cspad:  print("data_cspad: ", data_cspad)
         else:           del data_cspad
         
         ipshell = IPShellEmbed(argv=['-pi1','In \\# >> ','-po','Out \\#: '], 
@@ -327,19 +328,19 @@ class pyana_plotter_beta (object) :
     def progress_report(self):
 
         if self.n_shots <= 10 :
-            print "Event # ", self.n_shots
+            print("Event # ", self.n_shots)
         elif self.n_shots < 100 :
             if (self.n_shots % 10)==0 :
-                print "Event # ", self.n_shots
+                print("Event # ", self.n_shots)
         elif self.n_shots < 1000 :
             if (self.n_shots % 100)==0 :
-                print "Event # ", self.n_shots
+                print("Event # ", self.n_shots)
         elif self.n_shots < 10000 :
             if (self.n_shots % 1000)==0 :
-                print "Event # ", self.n_shots
+                print("Event # ", self.n_shots)
         else:
             if (self.n_shots % 10000)==0 :
-                print "Event # ", self.n_shots
+                print("Event # ", self.n_shots)
 
 
 
@@ -360,4 +361,4 @@ class pyana_plotter_beta (object) :
             plt.draw()
 
         else :
-            print "Displaymode?? ", self.display_mode
+            print("Displaymode?? ", self.display_mode)

@@ -21,6 +21,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import print_function
 
 
 #------------------------------
@@ -85,7 +86,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         Description
         """
         self.psana = psana
-        print "gui_explorer_main (psana=%s)" % self.psana
+        print("gui_explorer_main (psana=%s)" % self.psana)
         QtGui.QMainWindow.__init__(self)
 
         QtCore.pyqtRemoveInputHook()
@@ -112,7 +113,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         self.pyanactrl = None
         
         self.create_main_frame()
-        print "Welcome to Xtc Explorer!"
+        print("Welcome to Xtc Explorer!")
 
     def create_main_frame(self):
 
@@ -376,10 +377,10 @@ class XtcExplorerMain (QtGui.QMainWindow) :
     #--------------------
     
     def set_instrument_act(self, value): 
-        print "Calling Set instrument - activated " , value
+        print("Calling Set instrument - activated " , value)
 
     def set_instrument(self, value): 
-        print "Calling set_instrument"
+        print("Calling set_instrument")
         self.comboBoxExp.clear()
         self.comboBoxExp.addItem("Select experiment")
         self.comboBoxExp.show()
@@ -401,13 +402,13 @@ class XtcExplorerMain (QtGui.QMainWindow) :
             self.comboBoxExp.addItem(fname)
 
     def set_experiment_act(self, value):
-        print "Calling set_experiment_activated", value
+        print("Calling set_experiment_activated", value)
 
 
     def set_experiment(self, value):
-        print "Calling set_experiment"
+        print("Calling set_experiment")
         self.experiment = self.comboBoxExp.currentText()
-        print self.experiment
+        print(self.experiment)
         try:
             self.directory = "/reg/d/psdm/" + self.instrument + "/" + self.experiment + "/xtc/"
             self.labelRun.show()
@@ -420,13 +421,13 @@ class XtcExplorerMain (QtGui.QMainWindow) :
 
 
     def set_runnumber(self):
-        print "calling set_runnumber"
+        print("calling set_runnumber")
         try:
             self.runnumber = int(self.lineEditRun.text())
             fileNamePattern = "e*-r%04d-*.xtc"%(self.runnumber)
         except:
             # ignore if not an integer
-            print "Didn't find any number in the box"
+            print("Didn't find any number in the box")
             return
 
         files = []
@@ -437,7 +438,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
                 if os.path.isfile(fullpath):                
                     files.append( fullpath )
         except:
-            print "No such file. Please select instrument and experiment"
+            print("No such file. Please select instrument and experiment")
             return
 
         nfiles = len(files)
@@ -446,7 +447,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
             for file in files:
                 self.add_file( str(file) )
 
-        print "A run has been selected. Will check the contents of these %d files"%nfiles
+        print("A run has been selected. Will check the contents of these %d files"%nfiles)
         self.scan_files_quick()
         
     def add_file(self, filename):
@@ -467,16 +468,16 @@ class XtcExplorerMain (QtGui.QMainWindow) :
                     self.comboBoxExp.setCurrentIndex(self.comboBoxExp.findText( self.experiment ))
                     self.lineEditRun.setText(self.runnumber)
                 except: 
-                    print "Failed to determine instrument, experiment or run number from the path (%s)."\
-                          % (filename)
+                    print("Failed to determine instrument, experiment or run number from the path (%s)."\
+                          % (filename))
 
                 # add the last file opened to the line dialog
                 self.lineedit.setText( str(filename) )
                 self.update_currentfiles()
             else :
-                print "Non-existent file: ", filename
+                print("Non-existent file: ", filename)
         else:
-            print "Was already in the list: ", filename
+            print("Was already in the list: ", filename)
 
     def file_browser(self):
         """Opens a Qt File Dialog
@@ -600,14 +601,14 @@ class XtcExplorerMain (QtGui.QMainWindow) :
             self.comboBoxExp.setCurrentIndex(self.comboBoxExp.findText( self.experiment ))
             self.lineEditRun.setText("%d"%self.runnumber)
         except: 
-            print "Failed to determine instrument, experiment or run number from the path (%s)."
+            print("Failed to determine instrument, experiment or run number from the path (%s).")
 
-        print "Filenames:          ", self.filenames
-        print "Directory:          ", self.directory
-        print "Experiment number:  ", self.expnumber
-        print "Experiment name:    ", self.experiment
-        print "Instrument:         ", self.instrument
-        print "Run number:         ", self.runnumber        
+        print("Filenames:          ", self.filenames)
+        print("Directory:          ", self.directory)
+        print("Experiment number:  ", self.expnumber)
+        print("Experiment name:    ", self.experiment)
+        print("Instrument:         ", self.instrument)
+        print("Run number:         ", self.runnumber)        
             
         
 
@@ -658,7 +659,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
     def documentation(self):        
         """Open confluence page on default web browser"""
         url = 'https://confluence.slac.stanford.edu/display/PCDS/XTC+Explorer'
-        print "Documentation on Confluence: %s"%url
+        print("Documentation on Confluence: %s"%url)
         webbrowser.open(url, new=2)
         
     def about(self):
@@ -718,7 +719,7 @@ part of it, please give an appropriate acknowledgment.
         
         plt.draw()
         
-        print "Done drawing"
+        print("Done drawing")
         
         #axim = plt.imshow( dark_image[500:1000,1000:1500] )#, origin='lower' )
 

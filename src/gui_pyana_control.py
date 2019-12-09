@@ -8,6 +8,7 @@
 @see gui_explorer_main.py
 @author Ingrid Ofte
 """
+from __future__ import print_function
 #--------------------------------
 #  Imports of standard modules --
 #--------------------------------
@@ -52,17 +53,17 @@ class myPopen(subprocess.Popen):
 
     def kill(self, signal = signal.SIGTERM):
         os.kill(self.pid, signal)
-        print  "pyana process %d has been killed "% self.pid
+        print("pyana process %d has been killed "% self.pid)
         status = 0 # not running
 
     def suspend(self):
         os.kill(self.pid, signal.SIGSTOP)
-        print "pyana process %d has been suspended "% self.pid
+        print("pyana process %d has been suspended "% self.pid)
         status = 2 # suspended
 
     def resume(self):
         os.kill(self.pid, signal.SIGCONT)
-        print "pyana process %d has been resumed "%self.pid
+        print("pyana process %d has been resumed "%self.pid)
         status = 1
         
 
@@ -94,16 +95,16 @@ class MyThread( QtCore.QThread ):
         return self._stop.isSet()
 
     def kill(self):
-        print " !   python threads cannot be interupted..."
-        print " !   you'll have to wait..."
-        print " !   or ^Z and kill the whole xtcbrowser process."
+        print(" !   python threads cannot be interupted...")
+        print(" !   you'll have to wait...")
+        print(" !   or ^Z and kill the whole xtcbrowser process.")
         # SOLUTION: Run the Plot gui in a subprocess, this subprocess then calls the thread.
         # That should keep the other GUIs active, while the Plot GUI waits (or not) for pyana.
         # Killing pyana thread then requires killing the Plot GUI subprocess.
         #self.terminate()  ... hangs indefinitely & freezes up the GUI
         #self.exit(0) ..... does nothing
         #self.quit() .... does nothing
-        print "done killing"
+        print("done killing")
 
         
 class XtcPyanaControl ( QtGui.QWidget ) :
@@ -378,13 +379,13 @@ Start with selecting data of interest to you from list on the left and general r
 
         # tabs tally only keeps tracks of tabs
         if tabname in self.cfg_tabs_tally:
-            print "A"
+            print("A")
             index = self.cfg_tabs_tally[ tabname ]
             self.cfg_tabs.setCurrentIndex(index)
             wf_tab = self.cfg_tabs.currentWidget()
 
             if remove:
-                print "B Remove"
+                print("B Remove")
                 if widgetname in wf_tab.modules_connected:
                     # if it's already there, remove it? 
                     wf_tab.modules_connected[widgetname].groupbox.setChecked(False)
@@ -394,14 +395,14 @@ Start with selecting data of interest to you from list on the left and general r
                     del self.cfg_tabs_tally[tabname]
 
             else :
-                print "B Add"
+                print("B Add")
                 # add it
                 if widgetname not in wf_tab.modules_connected:
                     wf_tab.add_module(mod)
 
 
         else:
-            print "C"
+            print("C")
             wf_tab = panels.WaveformConfigGui(self,title=tabname)
             wf_tab.add_module(mod)
             self.connect( wf_tab.apply_button,
@@ -427,7 +428,7 @@ Start with selecting data of interest to you from list on the left and general r
             return
 
         image_widget = panels.ImageConfigGui(mod,self)
-        print image_widget
+        print(image_widget)
         self.connect(image_widget.apply_button,
                      QtCore.SIGNAL('clicked()'), self.update_pyana_tab )        
 
@@ -547,7 +548,7 @@ Start with selecting data of interest to you from list on the left and general r
         return 
             
     def draw_image(self):
-        print "Note to self: remember to draw the image!"
+        print("Note to self: remember to draw the image!")
         
 
 
@@ -728,7 +729,7 @@ Start with selecting data of interest to you from list on the left and general r
         try:
             index = modules_to_run.index("XtcExplorer.pyana_scan")
         except ValueError :
-            print "ValueError"
+            print("ValueError")
             
         #print "XtcExplorer.pyana_scan at ", index
         source = str(box.text())
@@ -745,11 +746,11 @@ Start with selecting data of interest to you from list on the left and general r
         
 
     def print_configuration(self):
-        print "----------------------------------------"
-        print "Configuration file (%s): " % self.settings.file
-        print "----------------------------------------"
-        print self.settings.config_text
-        print "----------------------------------------"
+        print("----------------------------------------")
+        print("Configuration file (%s): " % self.settings.file)
+        print("----------------------------------------")
+        print(self.settings.config_text)
+        print("----------------------------------------")
         return
 
     def write_configfile(self):
@@ -775,16 +776,16 @@ Start with selecting data of interest to you from list on the left and general r
         proc_emacs = None
         try: 
             myeditor = os.environ['EDITOR']
-            print "Launching your favorite editor %s to edit config file" % myeditor
+            print("Launching your favorite editor %s to edit config file" % myeditor)
             proc_emacs = myPopen("$EDITOR %s" % self.settings.file, shell=True) 
         except :
-            print "Launching emacs to edit the config file."
-            print "To launch another editor of your choice, make sure to",
-            print "set the EDITOR variable in your shell environment."
+            print("Launching emacs to edit the config file.")
+            print("To launch another editor of your choice, make sure to", end=' ')
+            print("set the EDITOR variable in your shell environment.")
             proc_emacs = myPopen("emacs %s" % self.settings.file, shell=True)
 
         stdout_value = proc_emacs.communicate()[0]
-        print stdout_value
+        print(stdout_value)
         #proc_emacs = MyThread("emacs %s" % self.settings.file) 
         #proc_emacs.start()
         
@@ -855,8 +856,8 @@ Start with selecting data of interest to you from list on the left and general r
         else :
             return
 
-        print "Calling pyana.... "
-        print "     ", ' '.join(lpoptions)
+        print("Calling pyana.... ")
+        print("     ", ' '.join(lpoptions))
 
         if 1 :
             # calling a new process
@@ -885,7 +886,7 @@ Start with selecting data of interest to you from list on the left and general r
             # calling as module... using threading.
             self.proc_pyana = MyThread(lpoptions)
             self.proc_pyana.start()
-            print "I'm back"
+            print("I'm back")
             
         self.pyana_button.setDisabled(True)
         self.quit_button.setEnabled(True)
@@ -906,7 +907,7 @@ Start with selecting data of interest to you from list on the left and general r
             else :
                 statustext = "pyana process %d has finished (returncode %d)"%(pid,status)
         else :
-            print "No pyana process to stop"
+            print("No pyana process to stop")
 
         self.proc_status.setText(statustext)
         self.quit_button.setDisabled(True)
@@ -946,7 +947,7 @@ Start with selecting data of interest to you from list on the left and general r
             else :
                 statustext = "pyana process %d has finished (returncode %d)"%(pid,status)
         else :
-            print "No pyana process to suspend or resume"
+            print("No pyana process to suspend or resume")
 
         self.proc_status.setText(statustext)
         self.susp_button.setText(buttontext)
