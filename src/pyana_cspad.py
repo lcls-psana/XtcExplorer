@@ -111,7 +111,7 @@ class  pyana_cspad ( object ) :
 
         self.plot_vmin = None
         self.plot_vmax = None
-        if plot_vrange is not None and plot_vrange is not "" : 
+        if plot_vrange is not None and plot_vrange != "" : 
             self.plot_vmin = float(plot_vrange.strip("()").split(":")[0])
             self.plot_vmax = float(plot_vrange.strip("()").split(":")[1])
             print("Using plot_vrange = %.2f,%.2f"%(self.plot_vmin,self.plot_vmax))

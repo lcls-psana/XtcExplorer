@@ -180,7 +180,7 @@ class PyanaOptions( object ):
 
         opt = self.getOptStrings(options_string)
         N = len(opt)
-        if N is 1:
+        if N == 1:
             return float(opt)
         if N > 1 :
             items = []
