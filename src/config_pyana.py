@@ -95,7 +95,7 @@ class ImageModConfig( ModuleConfig ):
         @param quantity        plot quantity name
         @param modifier        a string
         """
-        item = (qnt for qnt in self.options["quantities"].split() if qnt.startswith(quantity) ).next()
+        item = next((qnt for qnt in self.options["quantities"].split() if qnt.startswith(quantity) ))
         newconfigline = self.options["quantities"].replace(item,"%s:%s"%\
                                                            (quantity,modifier))
 #                                                           (quantity,''.join(str(modifier,).split())))
