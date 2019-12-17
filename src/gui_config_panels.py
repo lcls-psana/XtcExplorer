@@ -376,7 +376,7 @@ class ImageConfigGui(QtGui.QWidget):
 
         try:
             nametag = mod.address
-            self.picsize = map(int, parent.moreinfo['DetInfo:%s'%nametag][0].split('x') )
+            self.picsize = list(map(int, parent.moreinfo['DetInfo:%s'%nametag][0].split('x') ))
         except:
             pass
 
@@ -585,7 +585,7 @@ class WaveformConfigSubGui( QtGui.QWidget ):
             #print parent
 
         checkbox_ch = []
-        for ch in xrange (nch):
+        for ch in range (nch):
             # Checkbox group for this channel
             chgr_ch = QtGui.QGroupBox("Ch %d"%(ch), self.groupbox)
             chgr_ch.setGeometry(QtCore.QRect(30,30,300,80))

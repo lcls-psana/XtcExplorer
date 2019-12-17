@@ -112,7 +112,7 @@ class pyana_waveform_beta (object) :
         self.mydata.nSmp = cfg.horiz().nbrSamples()
         self.mydata.smpInt = cfg.horiz().sampInterval() 
 
-        self.mydata.channels = range(0,self.mydata.nCh)
+        self.mydata.channels = list(range(0,self.mydata.nCh))
         try:
             self.mydata.channels = self.quantities['channels']
         except:
@@ -121,7 +121,7 @@ class pyana_waveform_beta (object) :
         self.mydata.wf_time = []
         self.mydata.wf_voltages = []
         self.mydata.wf2_voltages = []
-        for ch in xrange(self.mydata.nCh):
+        for ch in range(self.mydata.nCh):
             self.mydata.wf_time.append(None)
             self.mydata.wf_voltages.append(None)
             self.mydata.wf2_voltages.append(None)
@@ -163,7 +163,7 @@ class pyana_waveform_beta (object) :
         # get event data
         # -------------------------------------------------
             
-        for ch in xrange( self.mydata.nCh ):
+        for ch in range( self.mydata.nCh ):
             acqData = evt.getAcqValue( self.source, ch, env)
 
             if acqData :

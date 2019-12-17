@@ -228,7 +228,7 @@ class  pyana_bld_beta ( object ) :
             evt.put(True, 'show_event')
 
             data_bld = []
-            for name,data in self.data.iteritems() :
+            for name,data in self.data.items() :
                 data_bld.append( data )
                     
             # give the list to the event object
@@ -253,7 +253,7 @@ class  pyana_bld_beta ( object ) :
             evt.put(True, 'show_event')
 
             data_bld = []
-            for name,data in self.data.iteritems() :
+            for name,data in self.data.items() :
                 data_bld.append( data )
                 
             # give the list to the event object

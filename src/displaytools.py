@@ -1,4 +1,6 @@
 from __future__ import print_function
+from __future__ import division
+from builtins import input
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -702,7 +704,7 @@ class Plotter(object):
         self.fig.suptitle(self.title)
 
         i = 1
-        framenames = self.frames.iterkeys()
+        framenames = iter(self.frames.keys())
         if ordered : framenames = sorted(framenames)
         for name in framenames:
 
@@ -830,7 +832,7 @@ class Plotter(object):
         print("The following clickable artist object was picked: ", event.artist)
 
         # in which Frame?
-        for aplot in self.frames.itervalues() :
+        for aplot in self.frames.values() :
             if aplot.axes == event.artist.axes : 
 
                 print("Current   threshold = ", aplot.threshold.value)
@@ -911,7 +913,7 @@ class Plotter(object):
         # change display mode
         if not event.inaxes and event.button == 2 :
             new_mode = None
-            new_mode_str = raw_input("Plotter: switch display mode? Enter new mode: ")
+            new_mode_str = input("Plotter: switch display mode? Enter new mode: ")
             if new_mode_str != "":
                 
                 if new_mode_str == "NoDisplay"   :
@@ -952,7 +954,7 @@ class Plotter(object):
             # find out which axes was clicked...
 
             # ... colorbar?
-            for key,aplot in self.frames.iteritems() :
+            for key,aplot in self.frames.items() :
                 if aplot.colb and aplot.colb.ax == event.inaxes: 
 
                     #print "You clicked on colorbar of plot ", aplot.name

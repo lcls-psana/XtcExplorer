@@ -6,6 +6,7 @@ part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import division
 __version__ = "$Revision: 3190 $"
 
 #--------------------------------
@@ -188,7 +189,7 @@ class  pyana_image ( object ) :
 
         print("Invalid device name", addr)
         if env.fwkName() == "psana":
-            keys = env.configStore().keys()
+            keys = list(env.configStore().keys())
             for k in keys:
                 if addr in str(k):
                     print("    possible match:", k)
@@ -280,7 +281,7 @@ class  pyana_image ( object ) :
             if not self.config:
                 print("*** getConfig(configType='%s', detsrc='%s') failed (addr='%s')" % (configType, detsrc, addr))
                 if env.fwkName() == "psana":
-                    keys = env.configStore().keys()
+                    keys = list(env.configStore().keys())
                     for k in keys:
                         if detsrc in str(k):
                             print("*** possible match:", k)
@@ -299,7 +300,7 @@ class  pyana_image ( object ) :
                 self.cspad[addr] = cspad.CsPad(sections, path=calibdir)
                 
             elif addr.find('Cspad')>=0:
-                quads = range(4)
+                quads = list(range(4))
                 if env.fwkName() == "psana":
                     sections = []
                     for q in quads:
@@ -310,7 +311,7 @@ class  pyana_image ( object ) :
                                 section.append(subsection)
                         sections.append(section)
                 else:
-                    sections = map(self.config.sections, quads)
+                    sections = list(map(self.config.sections, quads))
                 self.cspad[addr] = cspad.CsPad(sections, path=calibdir)
                 self.cspad[addr].cmmode_mode = self.cmmode_mode
                 self.cspad[addr].cmmode_thr = self.cmmode_thr

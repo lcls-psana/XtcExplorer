@@ -17,6 +17,7 @@ part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import division
 
 #--------------------------------
 #  Imports of standard modules --
@@ -199,7 +200,7 @@ class  pyana_image_beta ( object ) :
 
             
         if self.source.find("Cspad")>0 :
-            quads = range(4)
+            quads = list(range(4))
             print() 
             print("Cspad configuration")
             print("  N quadrants   : %d" % config.numQuads())
@@ -212,13 +213,13 @@ class  pyana_image_beta ( object ) :
             try:
                 # older versions may not have all methods
                 print("  roiMask       : [%s]" % ', '.join([hex(config.roiMask(q)) for q in quads]))
-                print("  numAsicsStored: %s" % str(map(config.numAsicsStored, quads)))
+                print("  numAsicsStored: %s" % str(list(map(config.numAsicsStored, quads))))
             except:
                 pass
-            print("  sections      : %s" % str(map(config.sections, quads)))
+            print("  sections      : %s" % str(list(map(config.sections, quads))))
             print()
         
-            sections = map(config.sections, quads)
+            sections = list(map(config.sections, quads))
             self.cspad = CsPad(sections)
             self.cspad.load_pedestals( self.pedestalfile )
             
@@ -429,7 +430,7 @@ class  pyana_image_beta ( object ) :
     def compute_polarcoordinates(self,size,nbins=100,origin=None):
         nx, ny = size
         if origin is None:
-            origin = (nx/2, ny/2)
+            origin = (nx//2, ny//2)
                             
         xx,yy = np.meshgrid( (np.arange(nx)-origin[0]), (np.arange(ny)-origin[1]) )
         # 2D array of x-coordintes, and 2D array of y-coordinates of each pixel
@@ -458,7 +459,7 @@ class  pyana_image_beta ( object ) :
     def book_roi_plot(self,image=None,options=None):
         self.mydata.roi = None
         if options is not None:
-            self.mydata.roi = map(int,options) # a list
+            self.mydata.roi = list(map(int,options)) # a list
 
         print("In book roi: ", end=' ')
         print(self.mydata.roi)
@@ -506,10 +507,10 @@ class  pyana_image_beta ( object ) :
         image_flat = image.ravel()
 
         intensities = [] 
-        for i in xrange(1, len(self.rbins)):
+        for i in range(1, len(self.rbins)):
             intensities.append(image_flat[self.r_indices==i] )
             
-        mean_intensity = map( np.ma.mean, intensities )
+        mean_intensity = list(map( np.ma.mean, intensities ))
 
         self.mydata.projR = np.array(mean_intensity)
         self.mydata.binsR =self.rbins
@@ -518,10 +519,10 @@ class  pyana_image_beta ( object ) :
         image_flat = image.ravel()
 
         intensities = [] 
-        for i in xrange(1, len(self.tbins)):
+        for i in range(1, len(self.tbins)):
             intensities.append(image_flat[self.th_indices==i] )
             
-        mean_intensity = map( np.ma.mean, intensities )
+        mean_intensity = list(map( np.ma.mean, intensities ))
 
         self.mydata.projTheta = mean_intensity
         self.mydata.binsTheta =self.tbins

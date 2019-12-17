@@ -140,7 +140,7 @@ class XtcPyanaControl ( QtGui.QWidget ) :
 
         # container for information about the data
         self.filenames = data.files
-        self.devices = data.devices.keys()
+        self.devices = list(data.devices.keys())
         self.epicsPVs = data.epicsPVs
         self.controls = data.controls
         self.moreinfo = data.moreinfo

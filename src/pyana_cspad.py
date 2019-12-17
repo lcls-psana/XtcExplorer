@@ -17,6 +17,7 @@ part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import division
 
 #--------------------------------
 #  Imports of standard modules --
@@ -176,8 +177,8 @@ class  pyana_cspad ( object ) :
             print('*** cspad config object is missing ***')
             return
                 
-        quads = range(4)
-        sections = map(config.sections, quads)
+        quads = list(range(4))
+        sections = list(map(config.sections, quads))
 
         self.cspad = CsPad(sections)
         self.data = CsPadData(self.source)
@@ -208,7 +209,7 @@ class  pyana_cspad ( object ) :
         try:
             # older versions may not have all methods
             print("  roiMask       : [%s]" % ', '.join([hex(config.roiMask(q)) for q in quads]))
-            print("  numAsicsStored: %s" % str(map(config.numAsicsStored, quads)))
+            print("  numAsicsStored: %s" % str(list(map(config.numAsicsStored, quads))))
         except:
             pass
         print("  sections      : %s" % str(sections))

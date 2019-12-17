@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import division
 #-----------------------------------------
 # PyanaOptions
 #-----------------------------------------
@@ -16,7 +17,7 @@ def ncol_nrow_from_nplots(nplots):
         # limit the number of columns to 3
         ncol = min(3, nplots)
         # number of rows if all rows are filled
-        nrow = nplots / ncol
+        nrow = nplots // ncol
         if (nplots % ncol) > 0:
             # if rows are not all filled, add one for the unfilled row.
             nrow += 1
@@ -231,7 +232,7 @@ class BaseData( object ):
     def show2( self ):
         itsme = "\n%s from %s :" % (self.type, self.name)
         myplottables = self.get_plottables()
-        for key, array in myplottables.iteritems():
+        for key, array in myplottables.items():
             itsme += "\n\t %s: \t %s   " % (key, array.shape)
         print(itsme)
         return

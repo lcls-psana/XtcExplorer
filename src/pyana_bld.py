@@ -293,7 +293,7 @@ class  pyana_bld ( object ) :
             self.data['PhaseCavity'].charge = np.vstack( \
                 ( np.array( self.PC_fchrg1), np.array(self.PC_fchrg2) )).T
 
-        for name,data in self.data.iteritems() :
+        for name,data in self.data.items() :
             #print "name, data = ", name, data            
             data_bld.append( data )
        

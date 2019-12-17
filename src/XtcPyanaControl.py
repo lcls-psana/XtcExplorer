@@ -164,10 +164,10 @@ class XtcPyanaControl ( QtGui.QWidget ) :
             
         # container for information about the data
         self.filenames = data.files
-        self.devices = data.devices.keys()
+        self.devices = list(data.devices.keys())
         self.epicsPVs = data.epicsPVs
         self.controls = data.controls
-        self.moreinfo = data.moreinfo.values()
+        self.moreinfo = list(data.moreinfo.values())
         self.nevents = data.nevents
         self.ncalib = len(data.nevents)
         
@@ -815,7 +815,7 @@ Do you want to proceed?
                     tmpoptions[n] = v
 
             newoptions = []
-            for n, v in tmpoptions.iteritems() :
+            for n, v in tmpoptions.items() :
                 optstring = "%s = %s" % (n,v)
                 newoptions.append(optstring)
 
@@ -1177,7 +1177,7 @@ Do you want to proceed?
         for line in lines:
             if line.find('source')>=0:
                 n,v = line.split('=')
-                sources.extend( filter(None, v.split(' ')))
+                sources.extend( [_f for _f in v.split(' ') if _f])
             elif line.find('do_ebeam = True'):
                 sources.extend('EBeam')
             elif line.find('do_gasdetector = True'):

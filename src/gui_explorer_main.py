@@ -22,11 +22,13 @@ part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import division
 
 
 #------------------------------
 #  Module's version from CVS --
 #------------------------------
+import six
 __version__ = "$Revision: 0 $"
 # $Source$
 
@@ -684,10 +686,13 @@ part of it, please give an appropriate acknowledgment.
     def on_draw(self):
         """ Redraws the figure
         """
-        str = unicode(self.textbox.text())
-        self.data = map(int, str.split())
+        if six.PY3:
+            str = str(self.textbox.text())
+        else:
+            str = unicode(self.textbox.text())
+        self.data = list(map(int, str.split()))
         
-        x = range(len(self.data))
+        x = list(range(len(self.data)))
         
         # clear the axes and redraw the plot anew
         #

@@ -26,7 +26,7 @@ class ModuleConfig( object ):
     def dump(self, indent = ""):
         print("%sName:    %s"%(indent, self.name))
         print("%sAddress: %s"%(indent, self.address))
-        for okey,oval in self.options.iteritems():
+        for okey,oval in self.options.items():
             print("%s  %s = %s"%(indent, okey,oval))
 
     def config_snippet(self):
@@ -37,7 +37,7 @@ class ModuleConfig( object ):
         if self.address :
             text = "[XtcExplorer.%s:%s]\n" % (self.name,self.address)
         
-        optkeys = self.options.keys()
+        optkeys = list(self.options.keys())
         optkeys.sort()
         for n in optkeys:
             if self.options[n] is not None: 
@@ -453,7 +453,7 @@ class Configuration( object ):
 
         config_module_list = []
         
-        for label, module in self.modules.iteritems():
+        for label, module in self.modules.items():
             self.config_text += " "
             self.config_text += "XtcExplorer.%s "%(label)
             config_module_list.append( module.config_snippet() )

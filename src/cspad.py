@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import division
 import numpy as np
 np.set_printoptions(precision=3,suppress=True)
 
@@ -241,7 +242,7 @@ class CsPad( object ):
         # pixels should now be (2 x 185 x 388)
 
         pairs = []
-        for i in xrange(2):
+        for i in range(2):
             asics = np.split( data[:,:,i],2,axis=1)
 
             # gap should be 3 pixels wide
@@ -296,7 +297,7 @@ class CsPad( object ):
         self.pixels = data2d.reshape(4,8,185,388)
 
         self.image = np.zeros((2*self.npix_quad+100, 2*self.npix_quad+100 ), dtype=self.pixels.dtype)
-        for quad in xrange (4):
+        for quad in range (4):
 
             quad_image = self.get_quad_image( self.pixels[quad], quad )
             self.qimages[quad] = quad_image
@@ -348,7 +349,7 @@ class CsPad( object ):
             # split each section (185x388) into two asics (185x194)
             array_asics = array_sections.reshape(4*8,185,2,194)
 
-            for a in xrange(0,2):
+            for a in range(0,2):
                 asic = array_asics[:,:,a,:].reshape( 4*8, 185*194 )
                 
                 # array of weights
@@ -359,7 +360,7 @@ class CsPad( object ):
                 # compute common modes
                 cmode = np.average( asic, axis=1, weights=warray )
                     
-                for i in xrange(32):
+                for i in range(32):
                     asic[i] = asic[i] - cmode[i] 
 
                 array_asics[:,:,a,:] = asic.reshape(4*8,185,194)
@@ -376,7 +377,7 @@ class CsPad( object ):
                 warray = (array<self.cmmode_thr).astype(int)
 
             cmode = np.average(array, axis=1, weights=warray)
-            for i in xrange(32):
+            for i in range(32):
                 array[i] = array[i]-cmode[i]
             self.pixels = array.reshape(4,8,185,388)
 
@@ -480,8 +481,8 @@ class CsPad( object ):
             nrows, ncols = pairs[sec].shape
 
             # colp,rowp are where the top-left corner of a section should be placed
-            rowp = self.npix_quad - self.sec_offset[0] - (self.section_centers[0][qn][sec] + nrows/2)
-            colp = self.npix_quad - self.sec_offset[1] - (self.section_centers[1][qn][sec] + ncols/2)
+            rowp = self.npix_quad - self.sec_offset[0] - (self.section_centers[0][qn][sec] + nrows//2)
+            colp = self.npix_quad - self.sec_offset[1] - (self.section_centers[1][qn][sec] + ncols//2)
             
             quadrant[rowp:rowp+nrows, colp:colp+ncols] = pairs[sec][0:nrows,0:ncols]
             if (rowp+nrows > self.npix_quad) or (colp+ncols > self.npix_quad) :

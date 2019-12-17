@@ -19,6 +19,7 @@ part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import division
 
 #------------------------------
 #  Module's version from SVN --
@@ -154,7 +155,7 @@ class pyana_scan (object) :
             name = cpv.name()
             value = cpv.value()
             
-            if name not in self.ccls_ctrl.keys() :
+            if name not in list(self.ccls_ctrl.keys()) :
                 self.ccls_ctrl[name] = []
 
             # store the value
@@ -176,7 +177,7 @@ class pyana_scan (object) :
         for epv_name in self.input_epics :
 
             # at first event, make a list for each scalar, to store event data
-            if epv_name not in self.evts_scalars.keys() :
+            if epv_name not in list(self.evts_scalars.keys()) :
                 print(epv_name)
                 self.evts_scalars[epv_name] = []
 
@@ -195,7 +196,7 @@ class pyana_scan (object) :
         for scalar in self.input_scalars :
 
             # at first event, make a list for each scalar, to store event data
-            if scalar not in self.evts_scalars.keys() :
+            if scalar not in list(self.evts_scalars.keys()) :
                 self.evts_scalars[scalar] = []
 
 
@@ -274,7 +275,7 @@ class pyana_scan (object) :
         self.ccls_nevts.append(self.n_shots)
 
         # process the chunk of events collected in this scan cycle
-        for name, list in self.evts_scalars.iteritems() :
+        for name, list in self.evts_scalars.items() :
             if env.fwkName() == "psana":
                 try:
                     list = [f() for f in list]
@@ -284,7 +285,7 @@ class pyana_scan (object) :
             mean =  np.mean(arr)
             std = np.std(arr)
 
-            if name not in self.ccls_scalars.keys() :
+            if name not in list(self.ccls_scalars.keys()) :
                 self.ccls_scalars[name] = []
 
             self.ccls_scalars[name].append( np.array([mean,std]) )
@@ -317,7 +318,7 @@ class pyana_scan (object) :
         
         
         self.data = []
-        for pv,data in self.data_scan.iteritems():
+        for pv,data in self.data_scan.items():
             self.data.append( data )
         evt.put( self.data, "data_scan")
         plt.show()
@@ -346,7 +347,7 @@ class pyana_scan (object) :
         fig.suptitle(suptitle)
 
         pos = 0
-        for ctrl, values in self.ccls_ctrl.iteritems() : 
+        for ctrl, values in self.ccls_ctrl.items() : 
 
             # convert to numpy arrays
             ctrl_array = np.array(values)
@@ -371,7 +372,7 @@ class pyana_scan (object) :
             plt.ylabel(ctrl,horizontalalignment='right')
             plt.draw()
 
-            for sc_name, sc_list in self.ccls_scalars.iteritems() :
+            for sc_name, sc_list in self.ccls_scalars.items() :
                 
                 pos += 1
                 axn = fig.add_subplot(nrows,ncols,pos)

@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import division
 #
 # encoder.py: plot encoder data
 #
@@ -220,7 +221,7 @@ class  pyana_encoder ( object ) :
 
             xaxis = np.arange( self.accu_start, self.n_shots )
             nbinsx = xaxis.size
-            ticks = [xaxis[0],xaxis[nbinsx/3],xaxis[2*nbinsx/3],xaxis[-1]] 
+            ticks = [xaxis[0],xaxis[nbinsx//3],xaxis[2*nbinsx//3],xaxis[-1]] 
 
             self.ax[i].clear()
             plt.axes(self.ax[i])

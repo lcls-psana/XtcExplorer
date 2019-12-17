@@ -1,3 +1,4 @@
+from __future__ import division
 #import scipy.constants as scipy
 import numpy as np
 import scipy
