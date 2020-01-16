@@ -35,7 +35,7 @@ import sys, random, os, signal, time, glob
 import matplotlib
 matplotlib.use('Qt4Agg')
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 #-----------------------------
 # Imports for other modules --
@@ -121,7 +121,7 @@ class MyThread( QtCore.QThread ):
         print("done killing")
     
 
-class XtcPyanaControl ( QtGui.QWidget ) :
+class XtcPyanaControl ( QtWidgets.QWidget ) :
     """Gui interface to pyana configuration & control
 
     @see pyana
@@ -151,7 +151,7 @@ class XtcPyanaControl ( QtGui.QWidget ) :
         else:
             self.pxana = "pyana"
             self.Pxana = "Pyana"
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setStyleSheet("QWidget {background-color: #FFFFFF }")
@@ -188,7 +188,7 @@ class XtcPyanaControl ( QtGui.QWidget ) :
         self.pvGroupLayout = None
 
         # buttons
-        self.pyana_config_text = QtGui.QLabel(self);
+        self.pyana_config_text = QtWidgets.QLabel(self);
         self.config_button = None
         self.econfig_button = None
         self.psana_button = None
@@ -220,16 +220,16 @@ class XtcPyanaControl ( QtGui.QWidget ) :
     def define_layout(self):
         """ Main layout of Pyana Control Center
         """
-        self.layout = QtGui.QVBoxLayout(self)
+        self.layout = QtWidgets.QVBoxLayout(self)
 
         # header: icon
-        h0 = QtGui.QHBoxLayout()
-        pic = QtGui.QLabel(self)
+        h0 = QtWidgets.QHBoxLayout()
+        pic = QtWidgets.QLabel(self)
         pic.setPixmap( QtGui.QPixmap(self.lclsLogo.path()))
         h0.addWidget( pic )
         h0.setAlignment( pic, QtCore.Qt.AlignLeft )
 
-        label = QtGui.QLabel(self)
+        label = QtWidgets.QLabel(self)
         label_text = """
 Configure your analysis here...
 Start with selecting data of interest to you from list on the left and general run / display options from the tab(s) on the right.
@@ -240,18 +240,18 @@ Start with selecting data of interest to you from list on the left and general r
                                         
 
         # mid layer: almost everything
-        h1 = QtGui.QHBoxLayout()
+        h1 = QtWidgets.QHBoxLayout()
 
         # to the left:
-        detector_gbox = QtGui.QGroupBox("In the file(s):")
+        detector_gbox = QtWidgets.QGroupBox("In the file(s):")
 
         # layout of the group must be global, checkboxes added later
-        self.lgroup = QtGui.QVBoxLayout()
+        self.lgroup = QtWidgets.QVBoxLayout()
         detector_gbox.setLayout(self.lgroup)
         h1.addWidget(detector_gbox)
 
         # to the right:
-        self.config_tabs = QtGui.QTabWidget()
+        self.config_tabs = QtWidgets.QTabWidget()
         self.config_tabs.setMinimumWidth(600)
         self.intro_tab()
         self.pyana_tab()
@@ -268,44 +268,44 @@ Start with selecting data of interest to you from list on the left and general r
     def layout_runcontrol(self):
 
         # Run psana button
-        self.psana_button = QtGui.QPushButton("&Run psana")
+        self.psana_button = QtWidgets.QPushButton("&Run psana")
         self.psana_button.setMaximumWidth(120)
-        self.connect(self.psana_button, QtCore.SIGNAL('clicked()'), self.run_psana)
+        self.psana_button.clicked.connect(self.run_psana)
 
         # Run pyana button
-        self.pyana_button = QtGui.QPushButton("&Run pyana")
+        self.pyana_button = QtWidgets.QPushButton("&Run pyana")
         self.pyana_button.setMaximumWidth(120)
-        self.connect(self.pyana_button, QtCore.SIGNAL('clicked()'), self.run_pyana)
+        self.pyana_button.clicked.connect(self.run_pyana)
 
         # Suspend pyana button
-        self.susp_button = QtGui.QPushButton("&Suspend " + self.pxana)
+        self.susp_button = QtWidgets.QPushButton("&Suspend " + self.pxana)
         self.susp_button.setCheckable(True) # Toggle two states: suspend / resume
         self.susp_button.setMaximumWidth(120)
-        self.connect(self.susp_button, QtCore.SIGNAL('clicked()'), self.suspend_pyana )
+        self.susp_button.clicked.connect(self.suspend_pyana)
 
         # Quit pyana button
-        self.quit_button = QtGui.QPushButton("&Quit " + self.pxana)
+        self.quit_button = QtWidgets.QPushButton("&Quit " + self.pxana)
         self.quit_button.setMaximumWidth(120)
-        self.connect(self.quit_button, QtCore.SIGNAL('clicked()'), self.quit_pyana )
+        self.quit_button.clicked.connect(self.quit_pyana)
 
         # pyana runstring
-        self.runstring_label = QtGui.QLabel("")
+        self.runstring_label = QtWidgets.QLabel("")
 
         # process status
-        self.proc_status = QtGui.QLabel("")
+        self.proc_status = QtWidgets.QLabel("")
 
-        pyana_button_line = QtGui.QHBoxLayout()
+        pyana_button_line = QtWidgets.QHBoxLayout()
         pyana_button_line.addWidget( self.runstring_label )
         if self.psana:
             pyana_button_line.addWidget( self.psana_button )
         pyana_button_line.addWidget( self.pyana_button )
 
-        pyana_qsusp_line = QtGui.QHBoxLayout()
+        pyana_qsusp_line = QtWidgets.QHBoxLayout()
         pyana_qsusp_line.addWidget( self.proc_status )
         pyana_qsusp_line.addWidget( self.susp_button )
         pyana_qsusp_line.addWidget( self.quit_button )
         
-        self.runcontrol = QtGui.QVBoxLayout()
+        self.runcontrol = QtWidgets.QVBoxLayout()
         self.runcontrol.addLayout( pyana_button_line  )
         self.runcontrol.addLayout( pyana_qsusp_line  )
         self.runcontrol.setAlignment( pyana_button_line, QtCore.Qt.AlignRight )
@@ -322,38 +322,38 @@ Start with selecting data of interest to you from list on the left and general r
                 
     def intro_tab(self):
         # First tab: help/info
-        self.help_widget = QtGui.QWidget()
-        self.help_layout = QtGui.QVBoxLayout(self.help_widget)
+        self.help_widget = QtWidgets.QWidget()
+        self.help_layout = QtWidgets.QVBoxLayout(self.help_widget)
 
         # run pyana with the first Nr events. Skip Ns events. 
-        self.run_n_status = QtGui.QLabel("Process all shots (or enter how many to process)")
-        self.run_n_enter = QtGui.QLineEdit("")
+        self.run_n_status = QtWidgets.QLabel("Process all shots (or enter how many to process)")
+        self.run_n_enter = QtWidgets.QLineEdit("")
         if self.run_n is not None:
-            self.run_n_status = QtGui.QLabel("Process %s shots"% self.run_n)
+            self.run_n_status = QtWidgets.QLabel("Process %s shots"% self.run_n)
             self.run_n_enter.setText( str(self.run_n) )
         self.run_n_enter.setMaximumWidth(90)
-        self.connect(self.run_n_enter, QtCore.SIGNAL('returnPressed()'), self.run_n_change )
-        self.run_n_change_btn = QtGui.QPushButton("Change") 
-        self.connect(self.run_n_change_btn, QtCore.SIGNAL('clicked()'), self.run_n_change )
+        self.run_n_enter.returnPressed.connect(self.run_n_change)
+        self.run_n_change_btn = QtWidgets.QPushButton("Change") 
+        self.run_n_change_btn.clicked.connect(self.run_n_change)
 
-        self.run_n_layout = QtGui.QHBoxLayout()
+        self.run_n_layout = QtWidgets.QHBoxLayout()
         self.run_n_layout.addWidget(self.run_n_status)
         self.run_n_layout.addStretch()
         self.run_n_layout.addWidget(self.run_n_enter)
         self.run_n_layout.addWidget(self.run_n_change_btn)
         self.help_layout.addLayout(self.run_n_layout, QtCore.Qt.AlignRight )
 
-        self.skip_n_layout = QtGui.QHBoxLayout()
-        self.skip_n_status = QtGui.QLabel("Skip no shots (or enter how many to skip)")
-        self.skip_n_enter = QtGui.QLineEdit("")
+        self.skip_n_layout = QtWidgets.QHBoxLayout()
+        self.skip_n_status = QtWidgets.QLabel("Skip no shots (or enter how many to skip)")
+        self.skip_n_enter = QtWidgets.QLineEdit("")
         self.skip_n_enter.setMaximumWidth(90)
         if self.skip_n is not None:
-            self.skip_n_status = QtGui.QLabel("Skip the first %d shots of xtc file"%self.skip_n )
+            self.skip_n_status = QtWidgets.QLabel("Skip the first %d shots of xtc file"%self.skip_n )
             self.skip_n_enter.setText( str(self.skip_n) )
             
-        self.connect(self.skip_n_enter, QtCore.SIGNAL('returnPressed()'), self.skip_n_change )
-        self.skip_n_change_btn = QtGui.QPushButton("Change") 
-        self.connect(self.skip_n_change_btn, QtCore.SIGNAL('clicked()'), self.skip_n_change )
+        self.skip_n_enter.returnPressed.connect(self.skip_n_change)
+        self.skip_n_change_btn = QtWidgets.QPushButton("Change") 
+        self.skip_n_change_btn.clicked.connect(self.skip_n_change)
 
         self.skip_n_layout.addWidget(self.skip_n_status)
         self.skip_n_layout.addStretch()
@@ -362,14 +362,14 @@ Start with selecting data of interest to you from list on the left and general r
         self.help_layout.addLayout(self.skip_n_layout, QtCore.Qt.AlignRight )
 
         # Multiprocessing?
-        mproc_status = QtGui.QLabel("Multiprocessing? No, single CPU")
-        mproc_menu = QtGui.QComboBox()
+        mproc_status = QtWidgets.QLabel("Multiprocessing? No, single CPU")
+        mproc_menu = QtWidgets.QComboBox()
         mproc_menu.setMaximumWidth(90)
         for i in range (0,mp.cpu_count()):
             mproc_menu.addItem(str(i+1))
         mproc_menu.setCurrentIndex(0) # Single-CPU
 
-        mproc_layout = QtGui.QHBoxLayout()
+        mproc_layout = QtWidgets.QHBoxLayout()
         mproc_layout.addWidget(mproc_status)
         mproc_layout.addStretch()
         mproc_layout.addWidget(mproc_menu)
@@ -383,19 +383,19 @@ Start with selecting data of interest to you from list on the left and general r
             else:
                 mproc_status.setText("Multiprocessing with %s CPUs"%text)
                 self.num_cpu = int(text)                
-        self.connect(mproc_menu, QtCore.SIGNAL('currentIndexChanged(int)'), mproc_changed )
+        mproc_menu.currentIndexChanged[int].connect(mproc_changed)
         
         # divider
         divider = ". . . "*30
-        self.help_layout.addWidget(QtGui.QLabel(divider))
+        self.help_layout.addWidget(QtWidgets.QLabel(divider))
         
         # Load config file
-        self.conf_layout = QtGui.QHBoxLayout()
-        self.conf_label = QtGui.QLabel("Use existing configuration file: ")
-        self.conf_widget = QtGui.QLineEdit('')
-        self.conf_okBtn = QtGui.QPushButton("OK") 
-        self.connect(self.conf_widget, QtCore.SIGNAL('returnPressed()'), self.use_configfile )
-        self.connect(self.conf_okBtn, QtCore.SIGNAL('clicked()'), self.use_configfile )
+        self.conf_layout = QtWidgets.QHBoxLayout()
+        self.conf_label = QtWidgets.QLabel("Use existing configuration file: ")
+        self.conf_widget = QtWidgets.QLineEdit('')
+        self.conf_okBtn = QtWidgets.QPushButton("OK") 
+        self.conf_widget.returnPressed.connect(self.use_configfile)
+        self.conf_okBtn.clicked.connect(self.use_configfile)
         self.conf_layout.addWidget(self.conf_label)
         self.conf_layout.addWidget(self.conf_widget)
         self.conf_layout.addWidget(self.conf_okBtn)
@@ -403,32 +403,32 @@ Start with selecting data of interest to you from list on the left and general r
 
 
         # Global Display mode
-        self.dmode_layout = QtGui.QHBoxLayout()
+        self.dmode_layout = QtWidgets.QHBoxLayout()
 
-        self.dmode_menu = QtGui.QComboBox()
+        self.dmode_menu = QtWidgets.QComboBox()
         self.dmode_menu.setMaximumWidth(90)
         self.dmode_menu.addItem("NoDisplay")
         self.dmode_menu.addItem("SlideShow")
         self.dmode_menu.addItem("Interactive")
         self.dmode_menu.setCurrentIndex(1)
-        self.connect(self.dmode_menu,  QtCore.SIGNAL('currentIndexChanged(int)'), self.process_dmode )
+        self.dmode_menu.currentIndexChanged[int].connect(self.process_dmode)
         self.displaymode = self.dmode_menu.currentText()
-        self.dmode_status = QtGui.QLabel("Display mode is %s"% self.displaymode)
+        self.dmode_status = QtWidgets.QLabel("Display mode is %s"% self.displaymode)
         self.dmode_layout.addWidget(self.dmode_status)
         self.dmode_layout.addWidget(self.dmode_menu)
         self.help_layout.addLayout(self.dmode_layout, QtCore.Qt.AlignRight)
 
         # plot every N events
-        self.plot_n_layout = QtGui.QHBoxLayout()
+        self.plot_n_layout = QtWidgets.QHBoxLayout()
         if self.plot_n == 0:
-            self.plotn_status = QtGui.QLabel("Plot only after all shots")
+            self.plotn_status = QtWidgets.QLabel("Plot only after all shots")
         else:
-            self.plotn_status = QtGui.QLabel("Plot every %d shots"%self.plot_n )
-        self.plotn_enter = QtGui.QLineEdit()
+            self.plotn_status = QtWidgets.QLabel("Plot every %d shots"%self.plot_n )
+        self.plotn_enter = QtWidgets.QLineEdit()
         self.plotn_enter.setMaximumWidth(90)
-        self.connect(self.plotn_enter, QtCore.SIGNAL('returnPressed()'), self.plotn_change )
-        self.plotn_change_btn = QtGui.QPushButton("&Change") 
-        self.connect(self.plotn_change_btn, QtCore.SIGNAL('clicked()'), self.plotn_change )
+        self.plotn_enter.returnPressed.connect(self.plotn_change)
+        self.plotn_change_btn = QtWidgets.QPushButton("&Change") 
+        self.plotn_change_btn.clicked.connect(self.plotn_change)
         self.plot_n_layout.addWidget(self.plotn_status)
         self.plot_n_layout.addStretch()
         self.plot_n_layout.addWidget(self.plotn_enter)
@@ -436,16 +436,16 @@ Start with selecting data of interest to you from list on the left and general r
         self.help_layout.addLayout(self.plot_n_layout, QtCore.Qt.AlignRight )
 
         # Accumulate N events (reset after N events)
-        self.accum_n_layout = QtGui.QHBoxLayout()
+        self.accum_n_layout = QtWidgets.QHBoxLayout()
         if self.accum_n == 0:
-            self.accumn_status = QtGui.QLabel("Accumulate all shots (or enter how many to accumulate)")
+            self.accumn_status = QtWidgets.QLabel("Accumulate all shots (or enter how many to accumulate)")
         else:
-            self.accumn_status = QtGui.QLabel("Accumulate %d shots (then reset)"%self.accum_n )
-        self.accumn_enter = QtGui.QLineEdit()
+            self.accumn_status = QtWidgets.QLabel("Accumulate %d shots (then reset)"%self.accum_n )
+        self.accumn_enter = QtWidgets.QLineEdit()
         self.accumn_enter.setMaximumWidth(90)
-        self.connect(self.accumn_enter, QtCore.SIGNAL('returnPressed()'), self.accumn_change )
-        self.accumn_change_btn = QtGui.QPushButton("&Change") 
-        self.connect(self.accumn_change_btn, QtCore.SIGNAL('clicked()'), self.accumn_change )
+        self.accumn_enter.returnPressed.connect(self.accumn_change)
+        self.accumn_change_btn = QtWidgets.QPushButton("&Change") 
+        self.accumn_change_btn.clicked.connect(self.accumn_change)
         self.accum_n_layout.addWidget(self.accumn_status)
         self.accum_n_layout.addStretch()
         self.accum_n_layout.addWidget(self.accumn_enter)
@@ -454,14 +454,14 @@ Start with selecting data of interest to you from list on the left and general r
 
         # Drop into iPython session at the end of the job?
         self.ipython = False
-        self.ipython_status = QtGui.QLabel("Drop into iPython at the end of the job?  %s" \
+        self.ipython_status = QtWidgets.QLabel("Drop into iPython at the end of the job?  %s" \
                                            % self.bool_string[ self.ipython ] )
-        self.ipython_layout = QtGui.QHBoxLayout()
-        self.ipython_menu = QtGui.QComboBox()
+        self.ipython_layout = QtWidgets.QHBoxLayout()
+        self.ipython_menu = QtWidgets.QComboBox()
         self.ipython_menu.setMaximumWidth(150)
         self.ipython_menu.addItem("No")
         self.ipython_menu.addItem("Yes")
-        self.connect(self.ipython_menu,  QtCore.SIGNAL('currentIndexChanged(int)'), self.process_ipython )
+        self.ipython_menu.currentIndexChanged[int].connect(self.process_ipython)
         self.ipython_layout.addWidget(self.ipython_status)
         self.ipython_layout.addWidget(self.ipython_menu)
         self.help_layout.addLayout(self.ipython_layout)
@@ -545,10 +545,10 @@ Start with selecting data of interest to you from list on the left and general r
         """ Second tab: Scan
         """
         if self.scan_widget is None :
-            self.scan_widget = QtGui.QWidget()
-            self.scan_layout = QtGui.QVBoxLayout(self.scan_widget)
+            self.scan_widget = QtWidgets.QWidget()
+            self.scan_layout = QtWidgets.QVBoxLayout(self.scan_widget)
 
-            message = QtGui.QLabel()
+            message = QtWidgets.QLabel()
             message.setText("Scan vs. %s"%"Hallo")
 
             self.scan_layout.addWidget(message)
@@ -563,14 +563,14 @@ Start with selecting data of interest to you from list on the left and general r
     def pyana_tab(self):
         """Pyana configuration text
         """
-        pyana_widget = QtGui.QWidget()
-        pyana_layout = QtGui.QVBoxLayout(pyana_widget)
+        pyana_widget = QtWidgets.QWidget()
+        pyana_layout = QtWidgets.QVBoxLayout(pyana_widget)
         
         pyana_widget.setLayout(pyana_layout)
-        self.pyana_config_label = QtGui.QLabel("Current " + self.pxana + " configuration:")
+        self.pyana_config_label = QtWidgets.QLabel("Current " + self.pxana + " configuration:")
         
         # scroll area for the configuration file text
-        scrollArea = QtGui.QScrollArea()
+        scrollArea = QtWidgets.QScrollArea()
         scrollArea.setWidgetResizable(True)
         scrollArea.setWidget( self.pyana_config_text )
         
@@ -578,12 +578,12 @@ Start with selecting data of interest to you from list on the left and general r
         pyana_layout.addWidget(scrollArea)
         
         # add some buttons for this tab: Write / Edit
-        pyana_button_layout = QtGui.QHBoxLayout()
-        self.config_button = QtGui.QPushButton("&Write configuration to file") 
-        self.connect(self.config_button, QtCore.SIGNAL('clicked()'), self.write_configfile )
+        pyana_button_layout = QtWidgets.QHBoxLayout()
+        self.config_button = QtWidgets.QPushButton("&Write configuration to file") 
+        self.config_button.clicked.connect(self.write_configfile)
         pyana_button_layout.addWidget( self.config_button )
-        self.econfig_button = QtGui.QPushButton("&Edit configuration file")
-        self.connect(self.econfig_button, QtCore.SIGNAL('clicked()'), self.edit_configfile )
+        self.econfig_button = QtWidgets.QPushButton("&Edit configuration file")
+        self.econfig_button.clicked.connect(self.edit_configfile)
         pyana_button_layout.addWidget( self.econfig_button )
 
         self.config_button.setDisabled(True)
@@ -645,10 +645,10 @@ Start with selecting data of interest to you from list on the left and general r
         # from the controls list
         nctrl = 0
         for ctrl in self.controls:
-            ckbox = QtGui.QCheckBox("ControlPV: %s"%ctrl, self)
+            ckbox = QtWidgets.QCheckBox("ControlPV: %s"%ctrl, self)
             self.checkboxes.append(ckbox)
             self.checklabels.append(ckbox.text())
-            self.connect(ckbox, QtCore.SIGNAL('stateChanged(int)'), self.process_checkboxes)
+            ckbox.stateChanged[int].connect(self.process_checkboxes)
             nctrl += 1
 
         for label in sorted(self.devices):
@@ -659,13 +659,13 @@ Start with selecting data of interest to you from list on the left and general r
 
             # make checkbox for this device
             #checkbox = QtGui.QCheckBox(': '.join(label.split(":")), self)
-            checkbox = QtGui.QCheckBox( label.split(":")[1], self)
-            self.connect(checkbox, QtCore.SIGNAL('stateChanged(int)'), self.process_checkboxes )
+            checkbox = QtWidgets.QCheckBox( label.split(":")[1], self)
+            checkbox.stateChanged[int].connect(self.process_checkboxes)
             
             # special case: Epics PVs
             if label.find("Epics") >= 0 : 
                 checkbox.setText("Epics Process Variables (%d)"%len(self.epicsPVs))
-                self.connect(checkbox, QtCore.SIGNAL('stateChanged(int)'), self.setup_gui_epics )
+                checkbox.stateChanged[int].connect(self.setup_gui_epics)
                 # add epics to front
                 self.checkboxes.insert(nctrl,checkbox)
                 self.checklabels.insert(nctrl,checkbox.text())
@@ -694,14 +694,14 @@ Start with selecting data of interest to you from list on the left and general r
                 # add epics channels to list of checkboxes, place them in a different widget
                 for self.pv in self.epicsPVs:
                     pvtext = "EpicsPV:  " + self.pv
-                    self.pvi = QtGui.QCheckBox(pvtext,self.pvWindow)
+                    self.pvi = QtWidgets.QCheckBox(pvtext,self.pvWindow)
 
                     ## check those that are control pvs
                     #for ctrl in self.controls: 
                     #    if ctrl in pvtext :
                     #        self.pvi.setChecked(True)
 
-                    self.connect(self.pvi, QtCore.SIGNAL('stateChanged(int)'), self.process_checkboxes )
+                    self.pvi.stateChanged[int].connect(self.process_checkboxes)
                     self.checkboxes.append(self.pvi)
                     self.checklabels.append(self.pvi.text())
                     self.pvGroupLayout.addWidget(self.pvi)
@@ -720,7 +720,7 @@ Start with selecting data of interest to you from list on the left and general r
 
     def make_epics_window(self):
         # open Epics window
-        self.pvWindow = QtGui.QWidget()
+        self.pvWindow = QtWidgets.QWidget()
         self.pvWindow.setStyleSheet("QWidget {background-color: #FFFFFF }")
         self.pvWindow.setWindowTitle('Available Epics PVs')
         self.pvWindow.setWindowIcon(QtGui.QIcon(self.lclsLogo.path()))
@@ -728,18 +728,18 @@ Start with selecting data of interest to you from list on the left and general r
         self.pvWindow.setMinimumHeight(700)
 
         # scroll area
-        self.scrollArea = QtGui.QScrollArea()
+        self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setWidgetResizable(True)
                 
         # list of PVs, a child of self.scrollArea
-        pvGroup = QtGui.QGroupBox("Epics channels (%d):"%len(self.epicsPVs))
+        pvGroup = QtWidgets.QGroupBox("Epics channels (%d):"%len(self.epicsPVs))
         self.scrollArea.setWidget(pvGroup)
 
-        self.pvGroupLayout = QtGui.QVBoxLayout()
+        self.pvGroupLayout = QtWidgets.QVBoxLayout()
         pvGroup.setLayout(self.pvGroupLayout)
 
         # layout of pvWindow:
-        pvLayout = QtGui.QHBoxLayout(self.pvWindow)
+        pvLayout = QtWidgets.QHBoxLayout(self.pvWindow)
         self.pvWindow.setLayout(pvLayout)
 
         # show window
@@ -762,9 +762,9 @@ A new config file with default settings will be generated.
 Do you want to proceed?
  """ % self.configfile
 
-            reply = QtGui.QMessageBox.question(self,'Alert', warning_text, 
-                                               QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-            if reply == QtGui.QMessageBox.No:
+            reply = QtWidgets.QMessageBox.question(self,'Alert', warning_text, 
+                                               QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+            if reply == QtWidgets.QMessageBox.No:
                 self.sender().setChecked(False)
                 return
             
@@ -1281,14 +1281,14 @@ Do you want to proceed?
 
         lpoptions = runstring.split(' ')
 
-        dialog =  QtGui.QInputDialog()
+        dialog =  QtWidgets.QInputDialog()
         dialog.resize(400,400)
         #dialog.setMinimumWidth(1500)
 
         text, ok = dialog.getText(self,
                                   self.Pxana + ' options',
                                   'Run ' + self.pxana + ' with the following command (edit as needed and click OK):',
-                                  QtGui.QLineEdit.Normal,
+                                  QtWidgets.QLineEdit.Normal,
                                   text=runstring)
 
         if ok:

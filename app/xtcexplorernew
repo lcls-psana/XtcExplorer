@@ -40,7 +40,7 @@ import os
 #-----------------------------
 # Imports for other modules --
 #-----------------------------
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 from XtcExplorer.gui_explorer_main import XtcExplorerMain
 
 #---------------------
@@ -96,7 +96,7 @@ def main( argv ) :
     # optional argument(s): input xtc-file(s)
     files = argv[1:]
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     explorer = XtcExplorerMain(psana,instrument,experiment,runnr)
 
     for file in files :

@@ -38,7 +38,7 @@ __version__ = "$Revision: 0 $"
 #-----------------------------
 import sys, os, random, fnmatch
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 from .XtcScanner import XtcScanner
 
 from .gui_pyana_control import XtcPyanaControl
@@ -68,7 +68,7 @@ import webbrowser
 #  Class definition --
 #---------------------
 
-class XtcExplorerMain (QtGui.QMainWindow) :
+class XtcExplorerMain (QtWidgets.QMainWindow) :
     """Gui Main Window
     
     Gui Main Widget for browsing Xtc files.
@@ -90,7 +90,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         """
         self.psana = psana
         print("gui_explorer_main (psana=%s)" % self.psana)
-        QtGui.QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
 
         QtCore.pyqtRemoveInputHook()
         # to avoid a problems with raw_input()
@@ -120,21 +120,21 @@ class XtcExplorerMain (QtGui.QMainWindow) :
 
     def create_main_frame(self):
 
-        self.main_widget = QtGui.QWidget(self)
+        self.main_widget = QtWidgets.QWidget(self)
         self.main_widget.setMinimumWidth(550)
         self.main_widget.setFocus()
 
         # Icon
-        self.pic = QtGui.QLabel(self)
+        self.pic = QtWidgets.QLabel(self)
         self.pic.setPixmap( QtGui.QPixmap(self.lclsLogo.path()))
 
         logo =  apputils.AppDataPath('XtcExplorer/icons/xtcexplorer_logo2.gif')
-        pic2 = QtGui.QLabel(self)
+        pic2 = QtWidgets.QLabel(self)
         pic2.setPixmap( QtGui.QPixmap(logo.path()))
 
 
         # menu
-        self.help_menu = QtGui.QMenu('&Help', self)
+        self.help_menu = QtWidgets.QMenu('&Help', self)
         self.menuBar().addMenu(self.help_menu)
         self.help_menu.addAction('&Documentation',self.documentation)
         self.help_menu.addAction('&About',self.about)
@@ -168,56 +168,56 @@ class XtcExplorerMain (QtGui.QMainWindow) :
 
 
         # --- File section ---
-        self.fileinfo = QtGui.QLabel(self)
+        self.fileinfo = QtWidgets.QLabel(self)
         self.fileinfo.setMinimumWidth(130)
 
         # Label showing currently selected files
-        self.currentfiles = QtGui.QLabel(self)
+        self.currentfiles = QtWidgets.QLabel(self)
         self.update_currentfiles()
 
         # Button: open file browser
-        self.fbrowser_button = QtGui.QPushButton("&File Browser...")
-        self.connect(self.fbrowser_button, QtCore.SIGNAL('clicked()'), self.file_browser )
+        self.fbrowser_button = QtWidgets.QPushButton("&File Browser...")
+        self.fbrowser_button.clicked.connect(self.file_browser)
         self.fbrowser_button.setMaximumWidth(100)
 
         # Button: clear file list
-        self.fclear_button = QtGui.QPushButton("&Clear File List")
-        self.connect(self.fclear_button, QtCore.SIGNAL('clicked()'), self.clear_file_list )
+        self.fclear_button = QtWidgets.QPushButton("&Clear File List")
+        self.fclear_button.clicked.connect(self.clear_file_list)
         self.fclear_button.setMaximumWidth(100)
 
         # Line edit: enter file name
-        self.lineedit = QtGui.QLineEdit("")
+        self.lineedit = QtWidgets.QLineEdit("")
         self.lineedit.setMinimumWidth(200)
-        self.connect(self.lineedit, QtCore.SIGNAL('returnPressed()'), self.add_file_from_lineedit )
+        self.lineedit.returnPressed.connect(self.add_file_from_lineedit)
 
         # Button: add file from line edit
-        self.addfile_button = QtGui.QPushButton("&Add")
-        self.connect(self.addfile_button, QtCore.SIGNAL('clicked()'), self.add_file_from_lineedit )
+        self.addfile_button = QtWidgets.QPushButton("&Add")
+        self.addfile_button.clicked.connect(self.add_file_from_lineedit)
              
         # ---- Select section -------
 
         # Instrument
-        self.comboBoxIns = QtGui.QComboBox()
+        self.comboBoxIns = QtWidgets.QComboBox()
         self.comboBoxIns.setMinimumWidth(160)
         self.comboBoxIns.clear() 
 
         # Experiment
-        self.comboBoxExp = QtGui.QComboBox()
+        self.comboBoxExp = QtWidgets.QComboBox()
         self.comboBoxExp.setMinimumWidth(160)
         self.comboBoxExp.hide()
 
         # Run number
-        self.labelRun = QtGui.QLabel("Run number: ")
+        self.labelRun = QtWidgets.QLabel("Run number: ")
         self.labelRun.hide()
 
-        self.lineEditRun = QtGui.QLineEdit("")
+        self.lineEditRun = QtWidgets.QLineEdit("")
         self.lineEditRun.setMinimumWidth(40)
         self.lineEditRun.setMaximumWidth(80)
-        self.connect(self.lineEditRun, QtCore.SIGNAL('returnPressed()'), self.set_runnumber )
+        self.lineEditRun.returnPressed.connect(self.set_runnumber)
         self.lineEditRun.hide()
 
-        self.okButtonRun = QtGui.QPushButton("&Load")
-        self.connect(self.okButtonRun, QtCore.SIGNAL('clicked()'), self.set_runnumber )
+        self.okButtonRun = QtWidgets.QPushButton("&Load")
+        self.okButtonRun.clicked.connect(self.set_runnumber)
         self.okButtonRun.hide()
 
         self.comboBoxIns.addItem("Select instrument")
@@ -237,27 +237,27 @@ class XtcExplorerMain (QtGui.QMainWindow) :
             index = self.comboBoxExp.findText(self.experiment)
             self.comboBoxExp.setCurrentIndex(index)
 
-        self.connect(self.comboBoxIns, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_instrument )
-        self.connect(self.comboBoxIns, QtCore.SIGNAL('activated(const QString&)'), self.set_instrument_act )
-        self.connect(self.comboBoxExp, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_experiment )
-        self.connect(self.comboBoxExp, QtCore.SIGNAL('activated(const QString&)'), self.set_experiment_act )
+        self.comboBoxIns.currentIndexChanged[int].connect(self.set_instrument)
+        self.comboBoxIns.activated['QString'].connect(self.set_instrument_act)
+        self.comboBoxExp.currentIndexChanged[int].connect(self.set_experiment)
+        self.comboBoxExp.activated['QString'].connect(self.set_experiment_act)
         
         #self.comboBoxExp.clear()
         #self.comboBoxExp.addItem("Select experiment")
 
-        self.labelOr = QtGui.QLabel("Or: ")
+        self.labelOr = QtWidgets.QLabel("Or: ")
 
 
         # ---- Test section -------
         
         # Test matplotlib widget
-        self.mpl_button = QtGui.QPushButton("&MatPlotLib")
-        self.connect(self.mpl_button, QtCore.SIGNAL('clicked()'), self.makeplot )
+        self.mpl_button = QtWidgets.QPushButton("&MatPlotLib")
+        self.mpl_button.clicked.connect(self.makeplot)
 
         # Quit application
-        self.quit_button = QtGui.QPushButton("&Quit")
+        self.quit_button = QtWidgets.QPushButton("&Quit")
         #self.connect(self.quit_button, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT('quit()') )
-        self.connect(self.quit_button, QtCore.SIGNAL('clicked()'), self.quit )
+        self.quit_button.clicked.connect(self.quit)
                 
 
         # holds checkboxes, pyana configuration and pyana run-button
@@ -266,26 +266,26 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         ### layout ###
         
         # header
-        h0 = QtGui.QHBoxLayout()
+        h0 = QtWidgets.QHBoxLayout()
         h0.addWidget( self.pic )
         h0.addWidget( pic2 )
         h0.setAlignment( self.pic, QtCore.Qt.AlignLeft )
         h0.setAlignment( pic2, QtCore.Qt.AlignLeft )
 
         # files 
-        fgroup = QtGui.QGroupBox("Select a file:")        
+        fgroup = QtWidgets.QGroupBox("Select a file:")        
 
-        fsVBox = QtGui.QVBoxLayout()
+        fsVBox = QtWidgets.QVBoxLayout()
         fsVBox.addWidget( self.comboBoxIns )
         fsVBox.addWidget( self.comboBoxExp )
 
-        runHBox = QtGui.QHBoxLayout()
+        runHBox = QtWidgets.QHBoxLayout()
         runHBox.addWidget( self.labelRun )        
         runHBox.addWidget( self.lineEditRun )
         runHBox.addWidget( self.okButtonRun )
         fsVBox.addLayout( runHBox )
 
-        fbrowser_layout = QtGui.QHBoxLayout()
+        fbrowser_layout = QtWidgets.QHBoxLayout()
         fbrowser_layout.addWidget( self.labelOr )
         fbrowser_layout.addWidget( self.fbrowser_button )
         fsVBox.addLayout( fbrowser_layout )
@@ -296,14 +296,14 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         #v1.addWidget( self.fclear_button )
         #v1.setAlignment( self.fclear_button, QtCore.Qt.AlignTop)
 
-        v2 = QtGui.QVBoxLayout()
+        v2 = QtWidgets.QVBoxLayout()
         v2.addWidget( self.currentfiles )
         v2.setAlignment( self.currentfiles, QtCore.Qt.AlignTop )
         v2.addWidget( self.fileinfo )
         v2.setAlignment( self.fileinfo, QtCore.Qt.AlignBottom )
 
 
-        H1 = QtGui.QHBoxLayout()
+        H1 = QtWidgets.QHBoxLayout()
         H1.addLayout(fsVBox)
         #H1.addWidget(self.labelOr )
         H1.addLayout(v2)
@@ -343,13 +343,13 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         #h5.addLayout( self.det_selector )
 
         # Quit
-        h6 = QtGui.QHBoxLayout()
+        h6 = QtWidgets.QHBoxLayout()
         h6.addWidget( self.mpl_button )
         h6.setAlignment(self.mpl_button, QtCore.Qt.AlignLeft )
         h6.addWidget( self.quit_button )
         h6.setAlignment( self.quit_button, QtCore.Qt.AlignRight )
 
-        l = QtGui.QVBoxLayout(self.main_widget)
+        l = QtWidgets.QVBoxLayout(self.main_widget)
         l.addLayout(h0)
         #l.addLayout(h1)
         #l.addLayout(h2)
@@ -372,7 +372,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
     def quit(self):
         if self.pyanactrl is not None : 
             self.pyanactrl.quit_pyana()
-        QtGui.qApp.closeAllWindows()
+        QtWidgets.QApplication.closeAllWindows()
 
 
     #--------------------
@@ -489,8 +489,8 @@ class XtcExplorerMain (QtGui.QMainWindow) :
         to select one or more xtc files. The file names
         are added to a list holding current files.
         """
-        selectedfiles = QtGui.QFileDialog.getOpenFileNames( \
-            self, "Select File",self.directory,"xtc files (*.xtc);; All files (*.*)")
+        selectedfiles = QtWidgets.QFileDialog.getOpenFileNames( \
+            self, "Select File",self.directory,"xtc files (*.xtc);; All files (*.*)")[0]
         
         # convert QStringList to python list of strings
         filename = ""
@@ -668,7 +668,7 @@ class XtcExplorerMain (QtGui.QMainWindow) :
     def about(self):
         progname = os.path.basename(sys.argv[0])
         progversion = __version__.strip("$")
-        QtGui.QMessageBox.about(self, "About %s" % os.path.basename(sys.argv[0]),
+        QtWidgets.QMessageBox.about(self, "About %s" % os.path.basename(sys.argv[0]),
 u"""%(prog)s ........ %(version)s
 GUI interface to analysis of xtc files.
 
@@ -736,7 +736,7 @@ part of it, please give an appropriate acknowledgment.
 #
 if __name__ == "__main__" :
 
-    qApp = QtGui.QApplication(sys.argv)
+    qApp = QtWidgets.QApplication(sys.argv)
     mainw = XtcExplorerMain()
     mainw.show()
     sys.exit(qApp.exec_())

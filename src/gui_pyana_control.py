@@ -21,7 +21,7 @@ import sys, random, os, signal
 import matplotlib
 matplotlib.use('Qt4Agg')
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 #-----------------------------
 # Imports for other modules --
@@ -108,7 +108,7 @@ class MyThread( QtCore.QThread ):
         print("done killing")
 
         
-class XtcPyanaControl ( QtGui.QWidget ) :
+class XtcPyanaControl ( QtWidgets.QWidget ) :
     """Gui interface to pyana configuration & control
 
     @see pyana
@@ -130,7 +130,7 @@ class XtcPyanaControl ( QtGui.QWidget ) :
         @param data    object that holds information about the data
         @param parent  parent widget, if any
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setStyleSheet("QWidget {background-color: #FFFFFF }")
@@ -167,7 +167,7 @@ class XtcPyanaControl ( QtGui.QWidget ) :
         self.pvWindow = None
         self.pvGroupLayout = None
 
-        self.pyana_config_text = QtGui.QLabel(self);
+        self.pyana_config_text = QtWidgets.QLabel(self);
 
         # buttons
         self.config_button = None
@@ -197,15 +197,15 @@ class XtcPyanaControl ( QtGui.QWidget ) :
     def define_layout(self):
         """ Main layout of Pyana Control Center
         """
-        self.layout = QtGui.QVBoxLayout(self)
+        self.layout = QtWidgets.QVBoxLayout(self)
 
         # header: icon
-        h0 = QtGui.QHBoxLayout()
-        pic = QtGui.QLabel(self)
+        h0 = QtWidgets.QHBoxLayout()
+        pic = QtWidgets.QLabel(self)
         pic.setPixmap( QtGui.QPixmap(self.lclsLogo.path()))
         h0.addWidget( pic )
         h0.setAlignment( pic, QtCore.Qt.AlignLeft )
-        label = QtGui.QLabel(self)
+        label = QtWidgets.QLabel(self)
         label_text = """
 Configure your analysis here... 
 Start with selecting data of interest to you from list on the left and general run / display options from the tab(s) on the right. 
@@ -215,17 +215,17 @@ Start with selecting data of interest to you from list on the left and general r
         h0.setAlignment( label, QtCore.Qt.AlignRight )
 
         # mid layer: almost everything
-        h1 = QtGui.QHBoxLayout()
+        h1 = QtWidgets.QHBoxLayout()
 
         # to the left:
-        detector_gbox = QtGui.QGroupBox("In the file(s):")
-        self.detector_box_layout = QtGui.QVBoxLayout()
+        detector_gbox = QtWidgets.QGroupBox("In the file(s):")
+        self.detector_box_layout = QtWidgets.QVBoxLayout()
         detector_gbox.setLayout(self.detector_box_layout)
         h1.addWidget(detector_gbox)
 
         # to the right:
         self.cfg_tabs_tally = {}
-        self.cfg_tabs = QtGui.QTabWidget()
+        self.cfg_tabs = QtWidgets.QTabWidget()
         self.cfg_tabs.tabsClosable()
         self.cfg_tabs.setMinimumWidth(600)
 
@@ -244,37 +244,37 @@ Start with selecting data of interest to you from list on the left and general r
     def layout_runcontrol(self):
 
         # Run pyana button
-        self.pyana_button = QtGui.QPushButton("&Run pyana")
+        self.pyana_button = QtWidgets.QPushButton("&Run pyana")
         self.pyana_button.setMaximumWidth(120)
-        self.connect(self.pyana_button, QtCore.SIGNAL('clicked()'), self.run_pyana)
+        self.pyana_button.clicked.connect(self.run_pyana)
 
         # Suspend pyana button
-        self.susp_button = QtGui.QPushButton("&Suspend pyana")
+        self.susp_button = QtWidgets.QPushButton("&Suspend pyana")
         self.susp_button.setCheckable(True) # Toggle two states: suspend / resume
         self.susp_button.setMaximumWidth(120)
-        self.connect(self.susp_button, QtCore.SIGNAL('clicked()'), self.suspend_pyana )
+        self.susp_button.clicked.connect(self.suspend_pyana)
 
         # Quit pyana button
-        self.quit_button = QtGui.QPushButton("&Quit pyana")
+        self.quit_button = QtWidgets.QPushButton("&Quit pyana")
         self.quit_button.setMaximumWidth(120)
-        self.connect(self.quit_button, QtCore.SIGNAL('clicked()'), self.quit_pyana )
+        self.quit_button.clicked.connect(self.quit_pyana)
 
         # pyana runstring
-        self.runstring_label = QtGui.QLabel("")
+        self.runstring_label = QtWidgets.QLabel("")
 
         # process status
-        self.proc_status = QtGui.QLabel("")
+        self.proc_status = QtWidgets.QLabel("")
 
-        pyana_button_line = QtGui.QHBoxLayout()
+        pyana_button_line = QtWidgets.QHBoxLayout()
         pyana_button_line.addWidget( self.runstring_label )
         pyana_button_line.addWidget( self.pyana_button )
 
-        pyana_qsusp_line = QtGui.QHBoxLayout()
+        pyana_qsusp_line = QtWidgets.QHBoxLayout()
         pyana_qsusp_line.addWidget( self.proc_status )
         pyana_qsusp_line.addWidget( self.susp_button )
         pyana_qsusp_line.addWidget( self.quit_button )
         
-        self.runcontrol = QtGui.QVBoxLayout()
+        self.runcontrol = QtWidgets.QVBoxLayout()
         self.runcontrol.addLayout( pyana_button_line  )
         self.runcontrol.addLayout( pyana_qsusp_line  )
         self.runcontrol.setAlignment( pyana_button_line, QtCore.Qt.AlignRight )
@@ -301,10 +301,10 @@ Start with selecting data of interest to you from list on the left and general r
         # from the controls list
         nctrl = 0
         for ctrl in self.controls:
-            ckbox = QtGui.QCheckBox("ControlPV: %s"%ctrl, self)
+            ckbox = QtWidgets.QCheckBox("ControlPV: %s"%ctrl, self)
             self.checkboxes.append(ckbox)
             self.checklabels.append(ckbox.text())
-            self.connect(ckbox, QtCore.SIGNAL('stateChanged(int)'), self.process_checkbox)
+            ckbox.stateChanged[int].connect(self.process_checkbox)
             nctrl += 1
 
         for label in sorted(self.devices):
@@ -315,13 +315,13 @@ Start with selecting data of interest to you from list on the left and general r
 
             # make checkbox for this device
             #checkbox = QtGui.QCheckBox(': '.join(label.split(":")), self)
-            checkbox = QtGui.QCheckBox( label.split(":")[1], self)
-            self.connect(checkbox, QtCore.SIGNAL('stateChanged(int)'), self.process_checkbox )
+            checkbox = QtWidgets.QCheckBox( label.split(":")[1], self)
+            checkbox.stateChanged[int].connect(self.process_checkbox)
             
             # special case: Epics PVs
             if label.find("Epics") >= 0 : 
                 checkbox.setText("Epics Process Variables (%d)"%len(self.epicsPVs))
-                self.connect(checkbox, QtCore.SIGNAL('stateChanged(int)'), self.setup_gui_epics )
+                checkbox.stateChanged[int].connect(self.setup_gui_epics)
                 # add epics to front
                 self.checkboxes.insert(nctrl,checkbox)
                 self.checklabels.insert(nctrl,checkbox.text())
@@ -344,8 +344,7 @@ Start with selecting data of interest to you from list on the left and general r
             return
 
         general_widget = panels.JobConfigGui( self.settings )
-        self.connect( general_widget.apply_button,
-                      QtCore.SIGNAL('clicked()'), self.update_pyana_tab )
+        general_widget.apply_button.clicked.connect(self.update_pyana_tab)
         
         num = self.cfg_tabs.addTab(general_widget,tabname)
         self.cfg_tabs_tally[tabname] = num
@@ -362,8 +361,7 @@ Start with selecting data of interest to you from list on the left and general r
             return
 
         bld_widget = panels.BldConfigGui()
-        self.connect( bld_widget.apply_button,
-                      QtCore.SIGNAL('clicked()'), self.update_pyana_tab )
+        bld_widget.apply_button.clicked.connect(self.update_pyana_tab)
 
         num = self.cfg_tabs.addTab(bld_widget,tabname)
         self.cfg_tabs_tally[tabname] = num
@@ -406,8 +404,7 @@ Start with selecting data of interest to you from list on the left and general r
             print("C")
             wf_tab = panels.WaveformConfigGui(self,title=tabname)
             wf_tab.add_module(mod)
-            self.connect( wf_tab.apply_button,
-                          QtCore.SIGNAL('clicked()'), self.update_pyana_tab )
+            wf_tab.apply_button.clicked.connect(self.update_pyana_tab)
 
             num = self.cfg_tabs.addTab(wf_tab,tabname)
             self.cfg_tabs_tally[tabname] = num
@@ -430,8 +427,7 @@ Start with selecting data of interest to you from list on the left and general r
 
         image_widget = panels.ImageConfigGui(mod,self)
         print(image_widget)
-        self.connect(image_widget.apply_button,
-                     QtCore.SIGNAL('clicked()'), self.update_pyana_tab )        
+        image_widget.apply_button.clicked.connect(self.update_pyana_tab)
 
         num = self.cfg_tabs.addTab(image_widget,"%s"%mod.address)
         self.cfg_tabs_tally["%s"%mod.address] = num
@@ -449,19 +445,19 @@ Start with selecting data of interest to you from list on the left and general r
                 del self.cfg_tabs_tally[tabname]
             return
 
-        ipimb_widget = QtGui.QWidget()
-        page_layout = QtGui.QVBoxLayout(ipimb_widget)
+        ipimb_widget = QtWidgets.QWidget()
+        page_layout = QtWidgets.QVBoxLayout(ipimb_widget)
 
         # has one widget: checkboxes for plotting
-        selection_box = QtGui.QGroupBox("Select what to plot:")
-        selection_layout = QtGui.QHBoxLayout()
+        selection_box = QtWidgets.QGroupBox("Select what to plot:")
+        selection_layout = QtWidgets.QHBoxLayout()
         selection_box.setLayout( selection_layout )
         
-        button_update_layout = QtGui.QHBoxLayout()
-        button_update = QtGui.QPushButton("Apply")
+        button_update_layout = QtWidgets.QHBoxLayout()
+        button_update = QtWidgets.QPushButton("Apply")
         button_update.setMaximumWidth(90)
         #button_update.setDisabled(True)
-        self.connect(button_update, QtCore.SIGNAL('clicked()'), self.update_pyana_tab )
+        button_update.clicked.connect(self.update_pyana_tab)
         button_update_layout.addStretch()
         button_update_layout.addWidget(button_update)
         
@@ -470,25 +466,25 @@ Start with selecting data of interest to you from list on the left and general r
 
         # -------------------------------------------
         # checkboxes"
-        fex_ch_label = QtGui.QLabel("Fex data", self)
-        checkbox_sum = QtGui.QCheckBox("Sum", self) 
-        checkbox_posx = QtGui.QCheckBox("Position X", self) 
-        checkbox_posy = QtGui.QCheckBox("Position Y", self) 
-        checkbox_chfex  = QtGui.QCheckBox("All Channels", self) 
-        checkbox_ch0fex = QtGui.QCheckBox("Ch0", self) 
-        checkbox_ch1fex = QtGui.QCheckBox("Ch1", self) 
-        checkbox_ch2fex = QtGui.QCheckBox("Ch2", self) 
-        checkbox_ch3fex = QtGui.QCheckBox("Ch3", self) 
+        fex_ch_label = QtWidgets.QLabel("Fex data", self)
+        checkbox_sum = QtWidgets.QCheckBox("Sum", self) 
+        checkbox_posx = QtWidgets.QCheckBox("Position X", self) 
+        checkbox_posy = QtWidgets.QCheckBox("Position Y", self) 
+        checkbox_chfex  = QtWidgets.QCheckBox("All Channels", self) 
+        checkbox_ch0fex = QtWidgets.QCheckBox("Ch0", self) 
+        checkbox_ch1fex = QtWidgets.QCheckBox("Ch1", self) 
+        checkbox_ch2fex = QtWidgets.QCheckBox("Ch2", self) 
+        checkbox_ch3fex = QtWidgets.QCheckBox("Ch3", self) 
 
-        self.connect(checkbox_sum, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_sum )
-        self.connect(checkbox_posx, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_posX )
-        self.connect(checkbox_posy, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_posY )
-        self.connect(checkbox_chfex, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_chFex )
-        self.connect(checkbox_ch0fex, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch0Fex )
-        self.connect(checkbox_ch1fex, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch1Fex )
-        self.connect(checkbox_ch2fex, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch2Fex )
-        self.connect(checkbox_ch3fex, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch3Fex )
-        fex_ch_layout = QtGui.QVBoxLayout()
+        checkbox_sum.stateChanged[int].connect(mod.set_opt_sum)
+        checkbox_posx.stateChanged[int].connect(mod.set_opt_posX)
+        checkbox_posy.stateChanged[int].connect(mod.set_opt_posY)
+        checkbox_chfex.stateChanged[int].connect(mod.set_opt_chFex)
+        checkbox_ch0fex.stateChanged[int].connect(mod.set_opt_ch0Fex)
+        checkbox_ch1fex.stateChanged[int].connect(mod.set_opt_ch1Fex)
+        checkbox_ch2fex.stateChanged[int].connect(mod.set_opt_ch2Fex)
+        checkbox_ch3fex.stateChanged[int].connect(mod.set_opt_ch3Fex)
+        fex_ch_layout = QtWidgets.QVBoxLayout()
         fex_ch_layout.addWidget(fex_ch_label)
         fex_ch_layout.addWidget(checkbox_sum)
         fex_ch_layout.addWidget(checkbox_posx)
@@ -500,18 +496,18 @@ Start with selecting data of interest to you from list on the left and general r
         fex_ch_layout.addWidget(checkbox_ch3fex)
         selection_layout.addLayout(fex_ch_layout)
         #
-        raw_ch_label = QtGui.QLabel("Raw counts", self)
-        checkbox_ch = QtGui.QCheckBox("All Channels", self) 
-        checkbox_ch0 = QtGui.QCheckBox("Ch0", self) 
-        checkbox_ch1 = QtGui.QCheckBox("Ch1", self) 
-        checkbox_ch2 = QtGui.QCheckBox("Ch2", self) 
-        checkbox_ch3 = QtGui.QCheckBox("Ch3", self) 
-        self.connect(checkbox_ch, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_chRaw )
-        self.connect(checkbox_ch0, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch0 )
-        self.connect(checkbox_ch1, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch1 )
-        self.connect(checkbox_ch2, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch2 )
-        self.connect(checkbox_ch3, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch3 )
-        raw_ch_layout = QtGui.QVBoxLayout()
+        raw_ch_label = QtWidgets.QLabel("Raw counts", self)
+        checkbox_ch = QtWidgets.QCheckBox("All Channels", self) 
+        checkbox_ch0 = QtWidgets.QCheckBox("Ch0", self) 
+        checkbox_ch1 = QtWidgets.QCheckBox("Ch1", self) 
+        checkbox_ch2 = QtWidgets.QCheckBox("Ch2", self) 
+        checkbox_ch3 = QtWidgets.QCheckBox("Ch3", self) 
+        checkbox_ch.stateChanged[int].connect(mod.set_opt_chRaw)
+        checkbox_ch0.stateChanged[int].connect(mod.set_opt_ch0)
+        checkbox_ch1.stateChanged[int].connect(mod.set_opt_ch1)
+        checkbox_ch2.stateChanged[int].connect(mod.set_opt_ch2)
+        checkbox_ch3.stateChanged[int].connect(mod.set_opt_ch3)
+        raw_ch_layout = QtWidgets.QVBoxLayout()
         raw_ch_layout.addWidget(raw_ch_label)
         raw_ch_layout.addWidget(checkbox_ch)
         raw_ch_layout.addWidget(checkbox_ch0)
@@ -520,18 +516,18 @@ Start with selecting data of interest to you from list on the left and general r
         raw_ch_layout.addWidget(checkbox_ch3)
         selection_layout.addLayout(raw_ch_layout)
         #
-        volt_ch_label = QtGui.QLabel("Raw voltages", self)
-        checkbox_chV  = QtGui.QCheckBox("All Channels", self) 
-        checkbox_ch0V = QtGui.QCheckBox("Ch0", self) 
-        checkbox_ch1V = QtGui.QCheckBox("Ch1", self) 
-        checkbox_ch2V = QtGui.QCheckBox("Ch2", self) 
-        checkbox_ch3V = QtGui.QCheckBox("Ch3", self) 
-        self.connect(checkbox_chV, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_chVolt )
-        self.connect(checkbox_ch0V, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch0Volt )
-        self.connect(checkbox_ch1V, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch1Volt )
-        self.connect(checkbox_ch2V, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch2Volt )
-        self.connect(checkbox_ch3V, QtCore.SIGNAL('stateChanged(int)'), mod.set_opt_ch3Volt )        
-        volt_ch_layout = QtGui.QVBoxLayout()
+        volt_ch_label = QtWidgets.QLabel("Raw voltages", self)
+        checkbox_chV  = QtWidgets.QCheckBox("All Channels", self) 
+        checkbox_ch0V = QtWidgets.QCheckBox("Ch0", self) 
+        checkbox_ch1V = QtWidgets.QCheckBox("Ch1", self) 
+        checkbox_ch2V = QtWidgets.QCheckBox("Ch2", self) 
+        checkbox_ch3V = QtWidgets.QCheckBox("Ch3", self) 
+        checkbox_chV.stateChanged[int].connect(mod.set_opt_chVolt)
+        checkbox_ch0V.stateChanged[int].connect(mod.set_opt_ch0Volt)
+        checkbox_ch1V.stateChanged[int].connect(mod.set_opt_ch1Volt)
+        checkbox_ch2V.stateChanged[int].connect(mod.set_opt_ch2Volt)
+        checkbox_ch3V.stateChanged[int].connect(mod.set_opt_ch3Volt)
+        volt_ch_layout = QtWidgets.QVBoxLayout()
         volt_ch_layout.addWidget(volt_ch_label)
         volt_ch_layout.addWidget(checkbox_chV)
         volt_ch_layout.addWidget(checkbox_ch0V)
@@ -566,10 +562,10 @@ Start with selecting data of interest to you from list on the left and general r
             return
 
         if self.scan_widget is None :
-            self.scan_widget = QtGui.QWidget()
-            self.scan_layout = QtGui.QVBoxLayout(self.scan_widget)
+            self.scan_widget = QtWidgets.QWidget()
+            self.scan_layout = QtWidgets.QVBoxLayout(self.scan_widget)
 
-            message = QtGui.QLabel()
+            message = QtWidgets.QLabel()
             message.setText("Scan vs. %s"%"Hallo")
 
             self.scan_layout.addWidget(message)
@@ -588,14 +584,14 @@ Start with selecting data of interest to you from list on the left and general r
         """Pyana configuration text
         """
         tabname = "Pyana Configuration"
-        pyana_widget = QtGui.QWidget()
-        pyana_layout = QtGui.QVBoxLayout(pyana_widget)
+        pyana_widget = QtWidgets.QWidget()
+        pyana_layout = QtWidgets.QVBoxLayout(pyana_widget)
 
         pyana_widget.setLayout(pyana_layout)
-        self.pyana_config_label = QtGui.QLabel("Current pyana configuration:")
+        self.pyana_config_label = QtWidgets.QLabel("Current pyana configuration:")
         
         # scroll area for the configuration file text
-        scrollArea = QtGui.QScrollArea()
+        scrollArea = QtWidgets.QScrollArea()
         scrollArea.setWidgetResizable(True)
         scrollArea.setWidget( self.pyana_config_text )
         
@@ -603,12 +599,12 @@ Start with selecting data of interest to you from list on the left and general r
         pyana_layout.addWidget(scrollArea)
         
         # add some buttons to this tab, for writing/editing config file, and run and quit pyana
-        pyana_button_layout = QtGui.QHBoxLayout()
-        self.config_button = QtGui.QPushButton("&Write configuration to file") 
-        self.connect(self.config_button, QtCore.SIGNAL('clicked()'), self.write_configfile )
+        pyana_button_layout = QtWidgets.QHBoxLayout()
+        self.config_button = QtWidgets.QPushButton("&Write configuration to file") 
+        self.config_button.clicked.connect(self.write_configfile)
         pyana_button_layout.addWidget( self.config_button )
-        self.econfig_button = QtGui.QPushButton("&Edit configuration file")
-        self.connect(self.econfig_button, QtCore.SIGNAL('clicked()'), self.edit_configfile )
+        self.econfig_button = QtWidgets.QPushButton("&Edit configuration file")
+        self.econfig_button.clicked.connect(self.edit_configfile)
         pyana_button_layout.addWidget( self.econfig_button )
         self.config_button.setDisabled(True)
         self.econfig_button.setDisabled(True)
@@ -648,14 +644,14 @@ Start with selecting data of interest to you from list on the left and general r
                 # add epics channels to list of checkboxes, place them in a different widget
                 for self.pv in self.epicsPVs:
                     pvtext = "EpicsPV:  " + self.pv
-                    self.pvi = QtGui.QCheckBox(pvtext,self.pvWindow)
+                    self.pvi = QtWidgets.QCheckBox(pvtext,self.pvWindow)
 
                     ## check those that are control pvs
                     #for ctrl in self.controls: 
                     #    if ctrl in pvtext :
                     #        self.pvi.setChecked(True)
 
-                    self.connect(self.pvi, QtCore.SIGNAL('stateChanged(int)'), self.process_checkbox )
+                    self.pvi.stateChanged[int].connect(self.process_checkbox)
                     self.checkboxes.append(self.pvi)
                     self.checklabels.append(self.pvi.text())
                     self.pvGroupLayout.addWidget(self.pvi)
@@ -674,7 +670,7 @@ Start with selecting data of interest to you from list on the left and general r
 
     def make_epics_window(self):
         # open Epics window
-        self.pvWindow = QtGui.QWidget()
+        self.pvWindow = QtWidgets.QWidget()
         self.pvWindow.setStyleSheet("QWidget {background-color: #FFFFFF }")
         self.pvWindow.setWindowTitle('Available Epics PVs')
         self.pvWindow.setWindowIcon(QtGui.QIcon(self.lclsLogo.path()))
@@ -682,18 +678,18 @@ Start with selecting data of interest to you from list on the left and general r
         self.pvWindow.setMinimumHeight(700)
 
         # scroll area
-        scrollArea = QtGui.QScrollArea()
+        scrollArea = QtWidgets.QScrollArea()
         scrollArea.setWidgetResizable(True)
                 
         # list of PVs, a child of scrollArea
-        pvGroup = QtGui.QGroupBox("Epics channels (%d):"%len(self.epicsPVs))
+        pvGroup = QtWidgets.QGroupBox("Epics channels (%d):"%len(self.epicsPVs))
         scrollArea.setWidget(pvGroup)
 
-        self.pvGroupLayout = QtGui.QVBoxLayout()
+        self.pvGroupLayout = QtWidgets.QVBoxLayout()
         pvGroup.setLayout(self.pvGroupLayout)
 
         # layout of pvWindow:
-        pvLayout = QtGui.QHBoxLayout(self.pvWindow)
+        pvLayout = QtWidgets.QHBoxLayout(self.pvWindow)
         self.pvWindow.setLayout(pvLayout)
 
         # show window
@@ -828,13 +824,13 @@ Start with selecting data of interest to you from list on the left and general r
 
         # turn sequence into a string, allow user to modify it
         runstring = ' '.join(lpoptions)
-        dialog =  QtGui.QInputDialog()
+        dialog =  QtWidgets.QInputDialog()
         dialog.resize(400,400)
         #dialog.setMinimumWidth(1500)
         text, ok = dialog.getText(self,
                                   'Pyana options',
                                   'Run pyana with the following command (edit as needed and click OK):',
-                                  QtGui.QLineEdit.Normal,
+                                  QtWidgets.QLineEdit.Normal,
                                   text=runstring )
         if ok:
             runstring = str(text)
