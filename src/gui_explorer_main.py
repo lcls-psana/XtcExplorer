@@ -23,6 +23,7 @@ part of it, please give an appropriate acknowledgment.
 """
 from __future__ import print_function
 from __future__ import division
+from __future__ import absolute_import
 
 
 #------------------------------
@@ -38,9 +39,9 @@ __version__ = "$Revision: 0 $"
 import sys, os, random, fnmatch
 
 from PyQt4 import QtGui, QtCore
-from XtcScanner import XtcScanner
+from .XtcScanner import XtcScanner
 
-from gui_pyana_control import XtcPyanaControl
+from .gui_pyana_control import XtcPyanaControl
 import AppUtils.AppDataPath as apputils
 
 import matplotlib

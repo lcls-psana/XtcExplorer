@@ -15,6 +15,7 @@ part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import absolute_import
 
 #------------------------------
 #  Module's version from SVN --
@@ -49,8 +50,8 @@ from IPython.frontend.terminal.embed import InteractiveShellEmbed
 #-----------------------------
 # Imports for other modules --
 #-----------------------------
-from utilities import PyanaOptions 
-from displaytools import DataDisplay
+from .utilities import PyanaOptions 
+from .displaytools import DataDisplay
 
 #----------------------------------
 # Local non-exported definitions --

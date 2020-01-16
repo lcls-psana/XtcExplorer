@@ -1,5 +1,6 @@
 from __future__ import print_function
 from __future__ import division
+from __future__ import absolute_import
 #
 # encoder.py: plot encoder data
 #
@@ -11,8 +12,8 @@ import matplotlib.pyplot as plt
 from pypdsdata import encoder
 from pypdsdata import xtc
 
-from utilities import PyanaOptions
-from utilities import EncoderData
+from .utilities import PyanaOptions
+from .utilities import EncoderData
 
 import logging
 

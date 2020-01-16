@@ -1,5 +1,6 @@
 from __future__ import print_function
 from __future__ import division
+from __future__ import absolute_import
 from builtins import input
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,7 +10,7 @@ import matplotlib.ticker as ticker
 from matplotlib.gridspec import GridSpec
 from matplotlib.widgets import Slider, SpanSelector
 from matplotlib.patches import Circle, Rectangle, Polygon
-from utilities import ncol_nrow_from_nplots
+from .utilities import ncol_nrow_from_nplots
 
 class DataDisplay(object):
 

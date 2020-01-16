@@ -9,6 +9,7 @@
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import absolute_import
 #--------------------------------
 #  Imports of standard modules --
 #--------------------------------
@@ -30,8 +31,8 @@ import threading
 import subprocess 
 from pyana import pyanamod
 
-import config_pyana as cfg
-import gui_config_panels as panels
+from . import config_pyana as cfg
+from . import gui_config_panels as panels
 import AppUtils.AppDataPath as apputils
 
 #----------------------------------

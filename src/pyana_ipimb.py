@@ -13,13 +13,14 @@ part of it, please give an appropriate acknowledgment.
 @author Ingrid Ofte
 """
 from __future__ import print_function
+from __future__ import absolute_import
 
 import numpy as np
 
 from pypdsdata.xtc import TypeId
 
-from utilities import PyanaOptions
-from utilities import IpimbData
+from .utilities import PyanaOptions
+from .utilities import IpimbData
 import inspect
 
 # analysis class declaration

@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import absolute_import
 #
 # bld.py: plot beamline data
 #
@@ -7,8 +8,8 @@ from __future__ import print_function
 import numpy as np
 import logging
 import matplotlib.pyplot as plt
-from utilities import PyanaOptions 
-from utilities import BldData
+from .utilities import PyanaOptions 
+from .utilities import BldData
 from pypdsdata import xtc
 
 

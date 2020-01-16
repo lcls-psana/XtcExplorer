@@ -18,6 +18,7 @@ part of it, please give an appropriate acknowledgment.
 
 @author Ingrid Ofte
 """
+from __future__ import absolute_import
 
 #------------------------------
 #  Module's version from SVN --
@@ -40,8 +41,8 @@ import matplotlib.pyplot as plt
 
 from pypdsdata import xtc
 
-from utilities import PyanaOptions
-from utilities import WaveformData
+from .utilities import PyanaOptions
+from .utilities import WaveformData
 
 
 #----------------------------------

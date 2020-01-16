@@ -18,6 +18,7 @@ part of it, please give an appropriate acknowledgment.
 """
 from __future__ import print_function
 from __future__ import division
+from __future__ import absolute_import
 
 #--------------------------------
 #  Imports of standard modules --
@@ -31,12 +32,12 @@ import numpy as np
 # Imports for other modules --
 #-----------------------------
 from pypdsdata import xtc
-from cspad import CsPad
+from .cspad import CsPad
 
-from displaytools import Plotter
-from utilities import Threshold
-from utilities import PyanaOptions
-from utilities import CsPadData
+from .displaytools import Plotter
+from .utilities import Threshold
+from .utilities import PyanaOptions
+from .utilities import CsPadData
 
 #---------------------
 #  Class definition --

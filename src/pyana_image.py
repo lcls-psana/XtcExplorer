@@ -7,6 +7,7 @@ part of it, please give an appropriate acknowledgment.
 """
 from __future__ import print_function
 from __future__ import division
+from __future__ import absolute_import
 __version__ = "$Revision: 3190 $"
 
 #--------------------------------
@@ -29,13 +30,13 @@ from pyana.calib import CalibFileFinder
 # Imports for local modules --
 #-----------------------------
 #from cspad     import CsPad
-import cspad
+from . import cspad
 
-from utilities import Threshold
-from utilities import PyanaOptions
-from utilities import ImageData
+from .utilities import Threshold
+from .utilities import PyanaOptions
+from .utilities import ImageData
 
-import algorithms as alg
+from . import algorithms as alg
 
 #---------------------
 #  Class definition --

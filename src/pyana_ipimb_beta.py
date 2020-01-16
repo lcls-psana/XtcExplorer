@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import absolute_import
 #
 # ipimb.py: plot beamline data
 #
@@ -8,8 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from   pypdsdata import xtc
-from utilities import PyanaOptions
-from utilities import IpimbData
+from .utilities import PyanaOptions
+from .utilities import IpimbData
 
 
 # analysis class declaration

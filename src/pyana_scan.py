@@ -20,6 +20,7 @@ part of it, please give an appropriate acknowledgment.
 """
 from __future__ import print_function
 from __future__ import division
+from __future__ import absolute_import
 
 #------------------------------
 #  Module's version from SVN --
@@ -41,9 +42,9 @@ import matplotlib.pyplot as plt
 
 from pypdsdata import xtc
 
-from utilities import PyanaOptions
-from utilities import ScanData
-from utilities import ncol_nrow_from_nplots
+from .utilities import PyanaOptions
+from .utilities import ScanData
+from .utilities import ncol_nrow_from_nplots
 
 #----------------------------------
 # Local non-exported definitions --
