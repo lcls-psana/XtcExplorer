@@ -10,12 +10,12 @@
 
 """Script to run the LCLS XtcExplorer
 
-This software was developed for the LCLS project.  If you use all or 
+This software was developed for the LCLS project.  If you use all or
 part of it, please give an appropriate acknowledgement.
 
 @see RelatedModule
 
-@version $Id$ 
+@version $Id$
 
 @author Ingrid Ofte
 """
@@ -54,9 +54,9 @@ from XtcExplorer.gui_explorer_main import XtcExplorerMain
 def printwarning():
     warning = """
 ******************************************************************************************
-This is xtcexplorernew! It's really just a testing ground yet, and while I invite you to 
-try it out and give me feedback and ideas, don't expect it to work yet! If you want to get 
-any work done, I encourage you to use the old xtcexplorer instead. 
+This is xtcexplorernew! It's really just a testing ground yet, and while I invite you to
+try it out and give me feedback and ideas, don't expect it to work yet! If you want to get
+any work done, I encourage you to use the old xtcexplorer instead.
 ******************************************************************************************
 """
     print(warning)
@@ -65,19 +65,19 @@ any work done, I encourage you to use the old xtcexplorer instead.
 def main( argv ) :
 
     printwarning()
-	
-    # pull out expected options: 
+
+    # pull out expected options:
     #
-    # Instrument: 
+    # Instrument:
     instrument = None
     if '-I' in argv :
-	index = argv.index('-I')
-	instrument = argv.pop(index)
-	instrument = argv.pop(index)
+        index = argv.index('-I')
+        instrument = argv.pop(index)
+        instrument = argv.pop(index)
 
     experiment = None
     if '-E' in argv:
-	index = argv.index('-E')
+        index = argv.index('-E')
         experiment = argv.pop(index)
         experiment = argv.pop(index)
 
@@ -85,13 +85,13 @@ def main( argv ) :
     if '-R' in argv:
         index = argv.index('-R')
         runnr = argv.pop(index)
-        runnr = argv.pop(index)       	
+        runnr = argv.pop(index)
 
     psana = False
     if '--psana' in argv :
-	index = argv.index('--psana')
-	psana = True
-	argv.pop(index)
+        index = argv.index('--psana')
+        psana = True
+        argv.pop(index)
 
     # optional argument(s): input xtc-file(s)
     files = argv[1:]
@@ -100,7 +100,7 @@ def main( argv ) :
     explorer = XtcExplorerMain(psana,instrument,experiment,runnr)
 
     for file in files :
-	explorer.add_file(file)
+        explorer.add_file(file)
 
     if files :
         explorer.scan_files_quick()
@@ -114,6 +114,6 @@ def main( argv ) :
 #  run application when imported as a main module
 #
 if __name__ == "__main__" :
-    
+
     sys.path.insert(0,".")
     sys.exit(main(sys.argv))

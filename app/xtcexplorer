@@ -10,12 +10,12 @@
 
 """Script to run the LCLS XtcExplorer
 
-This software was developed for the LCLS project.  If you use all or 
+This software was developed for the LCLS project.  If you use all or
 part of it, please give an appropriate acknowledgement.
 
 @see RelatedModule
 
-@version $Id$ 
+@version $Id$
 
 @author Ingrid Ofte
 """
@@ -55,13 +55,13 @@ def main(argv) :
 
     psana = True
     if '--psana' in argv :
-	index = argv.index('--psana')
-	psana = True
-	argv.pop(index)
+        index = argv.index('--psana')
+        psana = True
+        argv.pop(index)
     if '--pyana' in argv :
-	index = argv.index('--pyana')
-	psana = False
-	argv.pop(index)
+        index = argv.index('--pyana')
+        psana = False
+        argv.pop(index)
 
     # optional argument(s): input xtc-file(s)
     files = argv[1:]
@@ -70,7 +70,7 @@ def main(argv) :
     explorer = XtcExplorerMain(psana)
 
     for file in files :
-	explorer.add_file(file)
+        explorer.add_file(file)
 
     if files :
         explorer.scan_files_quick()
