@@ -5,14 +5,13 @@ from random import randint
 from os import system
 from sys import stdout
 from glob import glob
-from sets import Set
 from pypdsdata import io
 from pypdsdata.xtc import *
 from pypdsdata.epics import *
 
 class XtcSearcher ( object ) :
-    all_contents = Set()
-    new_contents = Set()
+    all_contents = set()
+    new_contents = set()
 
     def __init__(self):
         pass
