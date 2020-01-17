@@ -37,7 +37,10 @@ __version__ = "$Revision: 0 $"
 #--------------------------------
 import sys
 import os
-import time
+try:
+  from time import clock # removed in python 3.8
+except ImportError:
+  from time import perf_counter as clock
 from optparse import OptionParser
 
 #---------------------------------
@@ -144,7 +147,7 @@ class XtcScanner ( object ) :
             self.fsize += os.path.getsize(fname)
             
         print("Start parsing files: \n", self.files)
-        start = time.clock()
+        start = clock()
 
         # read datagrams one by one
         
@@ -192,7 +195,7 @@ class XtcScanner ( object ) :
                 print(" . ", end=' ')
                 sys.stdout.flush()
 
-        elapsed = ( time.clock() - start )
+        elapsed = ( clock() - start )
         frac = float(self.dgsize)/float(self.fsize)
         print("\r  %d datagrams read (approx %.0f %% of run) in %f s " % (ndg, 100*frac, elapsed))
 
